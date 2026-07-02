@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ComplaintStatus {
+  NEW
+  IN_REVIEW
+  RESOLVED
+  REJECTED
+}
+
+enum MediaPurpose {
+  LOGO
+  COVER
+  GALLERY
+  OFFICIAL_PHOTO
+  PRODUCT_IMAGE
+  COMPLAINT_EVIDENCE
+  DOCUMENT
+}
+
+model VillageProfile {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  tagline     String
+  description String   @db.Text
+  address     String?
+  phone       String?
+  email       String?
+  mapUrl      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model VillageOfficial {
+  id           String        @id @default(cuid())
+  name         String
+  position     String
+  bio          String?       @db.Text
+  photoAssetId String?
+  order        Int           @default(0)
+  status       ContentStatus @default(PUBLISHED)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Announcement {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  summary     String        @db.Text
+  body        String        @db.Text
+  publishedAt DateTime?
+  status      ContentStatus @default(DRAFT)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Agenda {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  description String        @db.Text
+  location    String?
+  startsAt    DateTime?
+  status      ContentStatus @default(DRAFT)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model News {
+  id            String        @id @default(cuid())
+  title         String
+  slug          String        @unique
+  excerpt       String        @db.Text
+  body          String        @db.Text
+  coverAssetId  String?
+  publishedAt   DateTime?
+  status        ContentStatus @default(DRAFT)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Statistic {
+  id        String        @id @default(cuid())
+  label     String
+  value     String
+  note      String?
+  order     Int           @default(0)
+  status    ContentStatus @default(PUBLISHED)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model GalleryItem {
+  id          String        @id @default(cuid())
+  title       String
+  description String?       @db.Text
+  mediaAssetId String?
+  order       Int           @default(0)
+  status      ContentStatus @default(DRAFT)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Product {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  description String        @db.Text
+  imageAssetId String?
+  contact     String?
+  status      ContentStatus @default(DRAFT)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Service {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  description String        @db.Text
+  requirements String?      @db.Text
+  order       Int           @default(0)
+  status      ContentStatus @default(PUBLISHED)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Complaint {
+  id              String          @id @default(cuid())
+  nik             String
+  name            String
+  email           String?
+  phone           String
+  message         String          @db.Text
+  evidenceAssetId String?
+  status          ComplaintStatus @default(NEW)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model BudgetItem {
+  id          String        @id @default(cuid())
+  label       String
+  value       String
+  description String        @db.Text
+  year        Int
+  order       Int           @default(0)
+  status      ContentStatus @default(DRAFT)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([year, status])
+}
+
+model SiteSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String   @db.Text
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model MediaAsset {
+  id         String       @id @default(cuid())
+  url        String
+  alt        String
+  storageKey String?
+  mimeType   String?
+  size       Int?
+  purpose    MediaPurpose
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+}

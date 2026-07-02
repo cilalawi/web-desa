@@ -1,0 +1,14 @@
+<svg width="640" height="480" viewBox="0 0 640 480" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Ilustrasi transparansi anggaran</title>
+  <desc id="desc">Diagram anggaran desa dengan kartu ringkasan dan grafik batang.</desc>
+  <rect width="640" height="480" rx="40" fill="#F8F4EA"/>
+  <rect x="88" y="82" width="464" height="316" rx="28" fill="white" stroke="#D8CCB6" stroke-width="4"/>
+  <rect x="132" y="132" width="160" height="22" rx="11" fill="#1F2937"/>
+  <rect x="132" y="188" width="64" height="144" rx="14" fill="#DFAE43"/>
+  <rect x="224" y="230" width="64" height="102" rx="14" fill="#9FB89A"/>
+  <rect x="316" y="168" width="64" height="164" rx="14" fill="#334155"/>
+  <rect x="408" y="258" width="64" height="74" rx="14" fill="#C8D6B9"/>
+  <path d="M132 348H500" stroke="#D8CCB6" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="500" cy="138" r="34" fill="#F8F4EA" stroke="#DFAE43" stroke-width="8"/>
+  <path d="M500 118V138L514 152" stroke="#1F2937" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

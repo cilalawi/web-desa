@@ -1,0 +1,39 @@
+import { EmptyState } from '@/components/public/EmptyState'
+import { NewsCard } from '@/components/public/NewsCard'
+import { PageHero } from '@/components/public/PageHero'
+import { prisma } from '@/lib/prisma'
+import { getSiteSettings, settingValue } from '@/lib/site-settings'
+
+export default async function BeritaPage() {
+  const [news, settings] = await Promise.all([
+    prisma.news.findMany({
+      where: { status: 'PUBLISHED' },
+      orderBy: { publishedAt: 'desc' },
+    }),
+    getSiteSettings(['empty.news']),
+  ])
+  const coverAssetIds = news.map((item) => item.coverAssetId).filter((id): id is string => Boolean(id))
+  const mediaAssets = coverAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: coverAssetIds } } }) : []
+  const mediaAsset = new Map(mediaAssets.map((asset) => [asset.id, asset]))
+
+  return (
+    <section className="mx-auto max-w-6xl px-4 py-14">
+      <PageHero eyebrow="Berita" title="Berita Desa" description="Kabar terbaru, dokumentasi kegiatan, dan informasi pembangunan Desa Cilalawi." />
+      <div className="mt-8 grid gap-5 md:grid-cols-3">
+        {news.length ? (
+          news.map((item) => (
+            <NewsCard
+              key={item.id}
+              title={item.title}
+              slug={item.slug}
+              excerpt={item.excerpt}
+              image={item.coverAssetId ? mediaAsset.get(item.coverAssetId) : null}
+            />
+          ))
+        ) : (
+          <EmptyState className="md:col-span-3" message={settingValue(settings, 'empty.news')} />
+        )}
+      </div>
+    </section>
+  )
+}
