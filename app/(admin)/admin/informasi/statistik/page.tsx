@@ -27,7 +27,7 @@ export default async function AdminStatistikPage() {
   const items = await prisma.statistic.findMany({ orderBy: { order: 'asc' } })
   return (
     <section>
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <AdminPageHeader title="Kelola Statistik" description="Kelola angka penduduk, keluarga, RT/RW, dan potensi desa." />
         <AdminCrudDialog title="Tambah Statistik" description="Statistik terbit tampil di halaman publik." trigger="Tambah Statistik"><StatForm /></AdminCrudDialog>
       </div>

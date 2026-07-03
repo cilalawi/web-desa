@@ -37,9 +37,32 @@ const groups = [
   },
 ]
 
+const adminMobileLinks = groups.flatMap((group) => group.links)
+
+export function AdminMobileNav() {
+  return (
+    <div className="border-b border-emerald-900/10 bg-emerald-950 px-4 py-3 md:hidden">
+      <div className="mb-3 flex items-center gap-3 text-white">
+        <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-white text-sm font-black text-emerald-800">DC</span>
+        <span className="leading-tight">
+          <span className="block text-sm font-extrabold">Admin Desa Cilalawi</span>
+          <span className="block text-xs text-emerald-100/75">Panel Website Resmi</span>
+        </span>
+      </div>
+      <nav className="flex gap-2 overflow-x-auto pb-1 text-sm font-semibold text-emerald-50/90">
+        {adminMobileLinks.map((route) => (
+          <Link key={route.href} href={route.href} className="shrink-0 rounded-full bg-white/10 px-4 py-2.5 ring-1 ring-white/10 transition-colors hover:bg-white hover:text-emerald-950">
+            {route.label}
+          </Link>
+        ))}
+      </nav>
+    </div>
+  )
+}
+
 export function AdminSidebar() {
   return (
-    <aside className="sticky top-0 hidden h-screen overflow-y-auto border-r border-emerald-900/10 bg-emerald-950 px-4 py-5 text-white md:flex md:flex-col">
+    <aside className="hidden border-r border-emerald-900/10 bg-emerald-950 px-4 py-5 text-white md:sticky md:top-0 md:flex md:h-screen md:flex-col md:overflow-y-auto">
       <Link href="/admin" className="flex items-center gap-3 rounded-[1.5rem] bg-white/10 p-3 ring-1 ring-white/10 transition-colors hover:bg-white/15">
         <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-white text-base font-black text-emerald-800 shadow-lg">DC</span>
         <span className="leading-tight">

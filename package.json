@@ -10,6 +10,7 @@
     "check:admin-auth": "node scripts/check-admin-auth-config.mjs",
     "check:db-content": "node scripts/check-db-content-config.mjs",
     "check:media-upload": "node scripts/check-media-upload-config.mjs",
+    "check:admin-mobile": "node scripts/check-admin-mobile-layout.mjs",
     "postinstall": "prisma generate"
   },
   "dependencies": {

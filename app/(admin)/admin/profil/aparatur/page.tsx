@@ -33,7 +33,7 @@ export default async function AdminAparaturPage() {
 
   return (
     <section>
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <AdminPageHeader title="Kelola Aparatur Desa" description="Kelola daftar perangkat desa, jabatan, dan foto profil." />
         <AdminCrudDialog title="Tambah Aparatur" description="Data aparatur terbit tampil di profil desa." trigger="Tambah Aparatur"><OfficialForm /></AdminCrudDialog>
       </div>

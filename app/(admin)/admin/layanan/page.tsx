@@ -27,7 +27,7 @@ export default async function AdminLayananPage() {
   const items = await prisma.service.findMany({ orderBy: { order: 'asc' } })
   return (
     <section>
-      <div className="flex items-start justify-between gap-4"><AdminPageHeader title="Kelola Layanan Warga" description="Tempat admin mengatur layanan, syarat, dan alur pengajuan warga." /><AdminCrudDialog title="Tambah Layanan" description="Layanan terbit tampil di halaman layanan warga." trigger="Tambah Layanan"><ServiceForm /></AdminCrudDialog></div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><AdminPageHeader title="Kelola Layanan Warga" description="Tempat admin mengatur layanan, syarat, dan alur pengajuan warga." /><AdminCrudDialog title="Tambah Layanan" description="Layanan terbit tampil di halaman layanan warga." trigger="Tambah Layanan"><ServiceForm /></AdminCrudDialog></div>
       <div className="grid gap-3">
         {items.map((item) => <Card key={item.id}><CardContent className="grid gap-4 md:grid-cols-[1fr_auto]"><div><div className="flex items-center gap-2"><h3 className="font-semibold">{item.title}</h3><StatusBadge status={item.status} /></div><p className="mt-2 text-sm text-muted-foreground">{item.description}</p></div><div className="flex gap-2"><AdminCrudDialog title="Edit Layanan" description="Perbarui layanan warga." trigger="Edit"><ServiceForm item={item} /></AdminCrudDialog><form action={deleteService}><input type="hidden" name="id" value={item.id} /><Button variant="outline" className="rounded-full text-destructive">Hapus</Button></form></div></CardContent></Card>)}
         {!items.length ? <Card><CardContent className="text-sm text-muted-foreground">Belum ada layanan.</CardContent></Card> : null}

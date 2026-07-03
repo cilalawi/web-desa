@@ -32,7 +32,7 @@ export default async function AdminAgendaPage() {
 
   return (
     <section>
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <AdminPageHeader title="Kelola Agenda" description="Kelola jadwal kegiatan, musyawarah, dan acara desa." />
         <AdminCrudDialog title="Tambah Agenda" description="Agenda terbit akan tampil di halaman informasi." trigger="Tambah Agenda"><AgendaForm /></AdminCrudDialog>
       </div>

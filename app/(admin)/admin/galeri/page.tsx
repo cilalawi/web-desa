@@ -32,7 +32,7 @@ export default async function AdminGaleriPage() {
 
   return (
     <section>
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <AdminPageHeader title="Kelola Galeri" description="Tempat admin mengelola dokumentasi kegiatan desa." />
         <AdminCrudDialog title="Tambah Galeri" description="Data foto akan siap dipasangkan dengan upload gambar." trigger="Tambah Galeri"><GalleryForm /></AdminCrudDialog>
       </div>

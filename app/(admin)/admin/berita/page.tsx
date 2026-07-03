@@ -32,7 +32,7 @@ export default async function AdminBeritaPage() {
 
   return (
     <section>
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <AdminPageHeader title="Kelola Berita" description="Buat, ubah, dan terbitkan berita desa." />
         <AdminCrudDialog title="Tambah Berita" description="Isi berita yang akan tampil di halaman publik." trigger="Tambah Berita">
           <NewsForm />

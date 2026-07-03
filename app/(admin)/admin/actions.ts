@@ -72,7 +72,7 @@ export async function upsertNews(fd: FormData) {
   revalidatePath('/berita')
   revalidatePath(`/berita/${data.slug}`)
   revalidatePath('/')
-  redirect('/admin/berita')
+  redirect('/admin/berita?saved=1')
 }
 
 export async function deleteNews(fd: FormData) {

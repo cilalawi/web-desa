@@ -32,7 +32,7 @@ export default async function AdminProdukPage() {
 
   return (
     <section>
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <AdminPageHeader title="Kelola Produk Desa" description="Kelola produk UMKM, hasil pertanian, dan kerajinan lokal." />
         <AdminCrudDialog title="Tambah Produk" description="Produk terbit tampil di etalase publik." trigger="Tambah Produk"><ProductForm /></AdminCrudDialog>
       </div>

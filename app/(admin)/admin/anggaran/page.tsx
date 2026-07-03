@@ -28,7 +28,7 @@ export default async function AdminAnggaranPage() {
   const items = await prisma.budgetItem.findMany({ orderBy: [{ year: 'desc' }, { order: 'asc' }] })
   return (
     <section>
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <AdminPageHeader title="Kelola APBDes" description="Kelola data transparansi anggaran desa." />
         <AdminCrudDialog title="Tambah APBDes" description="Data terbit tampil di ringkasan transparansi." trigger="Tambah APBDes"><BudgetForm /></AdminCrudDialog>
       </div>

@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { FormSubmitButton } from '@/components/admin/FormSubmitButton'
 
 export function AdminForm({
   action,
@@ -13,7 +13,7 @@ export function AdminForm({
     <form action={action} className="grid gap-4">
       {children}
       <div className="flex justify-end gap-2">
-        <Button type="submit" className="rounded-full px-6">{submitLabel}</Button>
+        <FormSubmitButton label={submitLabel} />
       </div>
     </form>
   )
