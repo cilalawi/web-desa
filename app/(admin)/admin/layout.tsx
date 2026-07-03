@@ -6,11 +6,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   await requireAdmin()
 
   return (
-    <div className="grid min-h-screen md:grid-cols-[240px_1fr]">
+    <div className="grid min-h-screen bg-[linear-gradient(180deg,rgba(236,253,245,0.55),rgba(255,251,235,0.75))] md:grid-cols-[280px_1fr]">
       <AdminSidebar />
       <div className="min-w-0">
         <AdminHeader />
-        <main className="p-6">{children}</main>
+        <main className="p-4 md:p-6">{children}</main>
       </div>
     </div>
   )
