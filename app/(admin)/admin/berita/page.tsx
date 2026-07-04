@@ -3,6 +3,7 @@ import { AdminCrudDialog } from '@/components/admin/AdminCrudDialog'
 import { AdminForm } from '@/components/admin/AdminForm'
 import { FileField, StatusField, TextAreaField, TextField } from '@/components/admin/AdminInputs'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
+import { SaveNotice } from '@/components/admin/SaveNotice'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -24,7 +25,12 @@ function NewsForm({ item }: { item?: NewsFormItem }) {
   )
 }
 
-export default async function AdminBeritaPage() {
+export default async function AdminBeritaPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ saved?: string; deleted?: string }>
+}) {
+  const notice = await searchParams
   const items = await prisma.news.findMany({ orderBy: { updatedAt: 'desc' } })
   const coverAssetIds = items.map((item) => item.coverAssetId).filter((id): id is string => Boolean(id))
   const mediaAssets = coverAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: coverAssetIds } } }) : []
@@ -38,6 +44,8 @@ export default async function AdminBeritaPage() {
           <NewsForm />
         </AdminCrudDialog>
       </div>
+      {notice.saved ? <SaveNotice type="saved" /> : null}
+      {notice.deleted ? <SaveNotice type="deleted" /> : null}
       <div className="grid gap-3">
         {items.map((item) => {
           const cover = item.coverAssetId ? mediaAsset.get(item.coverAssetId) : null

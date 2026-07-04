@@ -85,7 +85,7 @@ export async function deleteNews(fd: FormData) {
   revalidatePath('/admin/berita')
   revalidatePath('/berita')
   revalidatePath('/')
-  redirect('/admin/berita')
+  redirect('/admin/berita?deleted=1')
 }
 
 // ── Announcements ──
@@ -113,7 +113,7 @@ export async function upsertAnnouncement(fd: FormData) {
   else await prisma.announcement.create({ data })
   revalidatePath('/admin/informasi/pengumuman')
   revalidatePath('/informasi/pengumuman')
-  redirect('/admin/informasi/pengumuman')
+  redirect('/admin/informasi/pengumuman?saved=1')
 }
 
 export async function deleteAnnouncement(fd: FormData) {
@@ -121,7 +121,7 @@ export async function deleteAnnouncement(fd: FormData) {
   await prisma.announcement.delete({ where: { id: str(fd, 'id', 'ID') } })
   revalidatePath('/admin/informasi/pengumuman')
   revalidatePath('/informasi/pengumuman')
-  redirect('/admin/informasi/pengumuman')
+  redirect('/admin/informasi/pengumuman?deleted=1')
 }
 
 // ── Agenda ──
@@ -144,7 +144,7 @@ export async function upsertAgenda(fd: FormData) {
   else await prisma.agenda.create({ data })
   revalidatePath('/admin/informasi/agenda')
   revalidatePath('/informasi/agenda')
-  redirect('/admin/informasi/agenda')
+  redirect('/admin/informasi/agenda?saved=1')
 }
 
 export async function deleteAgenda(fd: FormData) {
@@ -152,7 +152,7 @@ export async function deleteAgenda(fd: FormData) {
   await prisma.agenda.delete({ where: { id: str(fd, 'id', 'ID') } })
   revalidatePath('/admin/informasi/agenda')
   revalidatePath('/informasi/agenda')
-  redirect('/admin/informasi/agenda')
+  redirect('/admin/informasi/agenda?deleted=1')
 }
 
 // ── Statistics ──
@@ -170,7 +170,7 @@ export async function upsertStatistic(fd: FormData) {
   else await prisma.statistic.create({ data })
   revalidatePath('/admin/informasi/statistik')
   revalidatePath('/informasi/statistik')
-  redirect('/admin/informasi/statistik')
+  redirect('/admin/informasi/statistik?saved=1')
 }
 
 export async function deleteStatistic(fd: FormData) {
@@ -178,7 +178,7 @@ export async function deleteStatistic(fd: FormData) {
   await prisma.statistic.delete({ where: { id: str(fd, 'id', 'ID') } })
   revalidatePath('/admin/informasi/statistik')
   revalidatePath('/informasi/statistik')
-  redirect('/admin/informasi/statistik')
+  redirect('/admin/informasi/statistik?deleted=1')
 }
 
 // ── Village Officials ──
@@ -204,7 +204,7 @@ export async function upsertOfficial(fd: FormData) {
   if (photoAsset && existing?.photoAssetId) await deleteMediaAsset(existing.photoAssetId)
   revalidatePath('/admin/profil/aparatur')
   revalidatePath('/profil/aparatur')
-  redirect('/admin/profil/aparatur')
+  redirect('/admin/profil/aparatur?saved=1')
 }
 
 export async function deleteOfficial(fd: FormData) {
@@ -215,7 +215,7 @@ export async function deleteOfficial(fd: FormData) {
   await deleteMediaAsset(item?.photoAssetId)
   revalidatePath('/admin/profil/aparatur')
   revalidatePath('/profil/aparatur')
-  redirect('/admin/profil/aparatur')
+  redirect('/admin/profil/aparatur?deleted=1')
 }
 
 // ── Services ──
@@ -237,7 +237,7 @@ export async function upsertService(fd: FormData) {
   else await prisma.service.create({ data })
   revalidatePath('/admin/layanan')
   revalidatePath('/layanan')
-  redirect('/admin/layanan')
+  redirect('/admin/layanan?saved=1')
 }
 
 export async function deleteService(fd: FormData) {
@@ -245,7 +245,7 @@ export async function deleteService(fd: FormData) {
   await prisma.service.delete({ where: { id: str(fd, 'id', 'ID') } })
   revalidatePath('/admin/layanan')
   revalidatePath('/layanan')
-  redirect('/admin/layanan')
+  redirect('/admin/layanan?deleted=1')
 }
 
 // ── Gallery ──
@@ -270,7 +270,7 @@ export async function upsertGalleryItem(fd: FormData) {
   if (mediaAsset && existing?.mediaAssetId) await deleteMediaAsset(existing.mediaAssetId)
   revalidatePath('/admin/galeri')
   revalidatePath('/galeri')
-  redirect('/admin/galeri')
+  redirect('/admin/galeri?saved=1')
 }
 
 export async function deleteGalleryItem(fd: FormData) {
@@ -281,7 +281,7 @@ export async function deleteGalleryItem(fd: FormData) {
   await deleteMediaAsset(item?.mediaAssetId)
   revalidatePath('/admin/galeri')
   revalidatePath('/galeri')
-  redirect('/admin/galeri')
+  redirect('/admin/galeri?deleted=1')
 }
 
 // ── Products ──
@@ -310,7 +310,7 @@ export async function upsertProduct(fd: FormData) {
   if (imageAsset && existing?.imageAssetId) await deleteMediaAsset(existing.imageAssetId)
   revalidatePath('/admin/produk')
   revalidatePath('/produk')
-  redirect('/admin/produk')
+  redirect('/admin/produk?saved=1')
 }
 
 export async function deleteProduct(fd: FormData) {
@@ -321,7 +321,7 @@ export async function deleteProduct(fd: FormData) {
   await deleteMediaAsset(item?.imageAssetId)
   revalidatePath('/admin/produk')
   revalidatePath('/produk')
-  redirect('/admin/produk')
+  redirect('/admin/produk?deleted=1')
 }
 
 // ── Budget Items ──
@@ -340,7 +340,7 @@ export async function upsertBudgetItem(fd: FormData) {
   else await prisma.budgetItem.create({ data })
   revalidatePath('/admin/anggaran')
   revalidatePath('/')
-  redirect('/admin/anggaran')
+  redirect('/admin/anggaran?saved=1')
 }
 
 export async function deleteBudgetItem(fd: FormData) {
@@ -348,7 +348,7 @@ export async function deleteBudgetItem(fd: FormData) {
   await prisma.budgetItem.delete({ where: { id: str(fd, 'id', 'ID') } })
   revalidatePath('/admin/anggaran')
   revalidatePath('/')
-  redirect('/admin/anggaran')
+  redirect('/admin/anggaran?deleted=1')
 }
 
 // ── Complaints (read + status update only) ──
@@ -360,7 +360,7 @@ export async function updateComplaintStatus(fd: FormData) {
   if (!['NEW', 'IN_REVIEW', 'RESOLVED', 'REJECTED'].includes(s)) throw new Error('Status invalid.')
   await prisma.complaint.update({ where: { id }, data: { status: s as 'NEW' | 'IN_REVIEW' | 'RESOLVED' | 'REJECTED' } })
   revalidatePath('/admin/layanan/pengaduan')
-  redirect('/admin/layanan/pengaduan')
+  redirect('/admin/layanan/pengaduan?saved=1')
 }
 
 // ── Village Profile ──
@@ -384,7 +384,7 @@ export async function updateProfile(fd: FormData) {
   revalidatePath('/kontak')
   revalidatePath('/peta')
   revalidatePath('/')
-  redirect('/admin/profil')
+  redirect('/admin/profil?saved=1')
 }
 
 // ── Site Settings ──
@@ -402,5 +402,5 @@ export async function updateSetting(fd: FormData) {
   for (const path of ['/', '/admin/pengaturan', '/profil', '/profil/sejarah', '/profil/visi-misi', '/kontak', '/peta']) {
     revalidatePath(path)
   }
-  redirect('/admin/pengaturan')
+  redirect('/admin/pengaturan?saved=1')
 }

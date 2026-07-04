@@ -3,6 +3,7 @@ import { AdminCrudDialog } from '@/components/admin/AdminCrudDialog'
 import { AdminForm } from '@/components/admin/AdminForm'
 import { FileField, StatusField, TextAreaField, TextField } from '@/components/admin/AdminInputs'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
+import { SaveNotice } from '@/components/admin/SaveNotice'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -25,7 +26,12 @@ function OfficialForm({ item }: { item?: Item }) {
   )
 }
 
-export default async function AdminAparaturPage() {
+export default async function AdminAparaturPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ saved?: string; deleted?: string }>
+}) {
+  const notice = await searchParams
   const items = await prisma.villageOfficial.findMany({ orderBy: { order: 'asc' } })
   const photoAssetIds = items.map((item) => item.photoAssetId).filter((id): id is string => Boolean(id))
   const mediaAssets = photoAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: photoAssetIds } } }) : []
@@ -37,6 +43,8 @@ export default async function AdminAparaturPage() {
         <AdminPageHeader title="Kelola Aparatur Desa" description="Kelola daftar perangkat desa, jabatan, dan foto profil." />
         <AdminCrudDialog title="Tambah Aparatur" description="Data aparatur terbit tampil di profil desa." trigger="Tambah Aparatur"><OfficialForm /></AdminCrudDialog>
       </div>
+      {notice.saved ? <SaveNotice type="saved" /> : null}
+      {notice.deleted ? <SaveNotice type="deleted" /> : null}
       <div className="grid gap-3 md:grid-cols-2">
         {items.map((item) => {
           const photo = item.photoAssetId ? mediaAsset.get(item.photoAssetId) : null

@@ -3,6 +3,7 @@ import { AdminCrudDialog } from '@/components/admin/AdminCrudDialog'
 import { AdminForm } from '@/components/admin/AdminForm'
 import { FileField, StatusField, TextAreaField, TextField } from '@/components/admin/AdminInputs'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
+import { SaveNotice } from '@/components/admin/SaveNotice'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -24,7 +25,12 @@ function ProductForm({ item }: { item?: Item }) {
   )
 }
 
-export default async function AdminProdukPage() {
+export default async function AdminProdukPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ saved?: string; deleted?: string }>
+}) {
+  const notice = await searchParams
   const items = await prisma.product.findMany({ orderBy: { updatedAt: 'desc' } })
   const imageAssetIds = items.map((item) => item.imageAssetId).filter((id): id is string => Boolean(id))
   const mediaAssets = imageAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: imageAssetIds } } }) : []
@@ -36,6 +42,8 @@ export default async function AdminProdukPage() {
         <AdminPageHeader title="Kelola Produk Desa" description="Kelola produk UMKM, hasil pertanian, dan kerajinan lokal." />
         <AdminCrudDialog title="Tambah Produk" description="Produk terbit tampil di etalase publik." trigger="Tambah Produk"><ProductForm /></AdminCrudDialog>
       </div>
+      {notice.saved ? <SaveNotice type="saved" /> : null}
+      {notice.deleted ? <SaveNotice type="deleted" /> : null}
       <div className="grid gap-3 md:grid-cols-3">
         {items.map((item) => {
           const image = item.imageAssetId ? mediaAsset.get(item.imageAssetId) : null

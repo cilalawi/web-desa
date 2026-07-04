@@ -1,15 +1,23 @@
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
+import { SaveNotice } from '@/components/admin/SaveNotice'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
 import { updateComplaintStatus } from '../../actions'
 
-export default async function AdminPengaduanPage() {
+export default async function AdminPengaduanPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ saved?: string; deleted?: string }>
+}) {
+  const notice = await searchParams
   const items = await prisma.complaint.findMany({ orderBy: { createdAt: 'desc' } })
+
   return (
     <section>
       <AdminPageHeader title="Pengaduan Masuk" description="Kelola pengaduan warga dari form layanan." />
+      {notice.saved ? <SaveNotice type="saved" message="Status pengaduan berhasil diperbarui." /> : null}
       <div className="grid gap-3">
         {items.map((item) => (
           <Card key={item.id}>

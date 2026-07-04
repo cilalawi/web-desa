@@ -2,6 +2,7 @@ import { AdminCrudDialog } from '@/components/admin/AdminCrudDialog'
 import { AdminForm } from '@/components/admin/AdminForm'
 import { StatusField, TextAreaField, TextField } from '@/components/admin/AdminInputs'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
+import { SaveNotice } from '@/components/admin/SaveNotice'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -27,7 +28,12 @@ function AgendaForm({ item }: { item?: Item }) {
   )
 }
 
-export default async function AdminAgendaPage() {
+export default async function AdminAgendaPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ saved?: string; deleted?: string }>
+}) {
+  const notice = await searchParams
   const items = await prisma.agenda.findMany({ orderBy: { startsAt: 'desc' } })
 
   return (
@@ -36,6 +42,8 @@ export default async function AdminAgendaPage() {
         <AdminPageHeader title="Kelola Agenda" description="Kelola jadwal kegiatan, musyawarah, dan acara desa." />
         <AdminCrudDialog title="Tambah Agenda" description="Agenda terbit akan tampil di halaman informasi." trigger="Tambah Agenda"><AgendaForm /></AdminCrudDialog>
       </div>
+      {notice.saved ? <SaveNotice type="saved" /> : null}
+      {notice.deleted ? <SaveNotice type="deleted" /> : null}
       <div className="grid gap-3">
         {items.map((item) => (
           <Card key={item.id}>

@@ -1,15 +1,23 @@
 import { AdminForm } from '@/components/admin/AdminForm'
 import { TextAreaField, TextField } from '@/components/admin/AdminInputs'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
+import { SaveNotice } from '@/components/admin/SaveNotice'
 import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
 import { updateProfile } from '../actions'
 
-export default async function AdminProfilPage() {
+export default async function AdminProfilPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ saved?: string; deleted?: string }>
+}) {
+  const notice = await searchParams
   const profile = await prisma.villageProfile.findFirst({ where: { name: 'Desa Cilalawi' } })
+
   return (
     <section>
       <AdminPageHeader title="Kelola Profil Desa" description="Kelola profil umum, kontak, alamat, dan peta desa." />
+      {notice.saved ? <SaveNotice type="saved" /> : null}
       <Card>
         <CardContent>
           <AdminForm action={updateProfile}>

@@ -2,6 +2,7 @@ import { AdminCrudDialog } from '@/components/admin/AdminCrudDialog'
 import { AdminForm } from '@/components/admin/AdminForm'
 import { StatusField, TextAreaField, TextField } from '@/components/admin/AdminInputs'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
+import { SaveNotice } from '@/components/admin/SaveNotice'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -24,14 +25,22 @@ function BudgetForm({ item }: { item?: Item }) {
   )
 }
 
-export default async function AdminAnggaranPage() {
+export default async function AdminAnggaranPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ saved?: string; deleted?: string }>
+}) {
+  const notice = await searchParams
   const items = await prisma.budgetItem.findMany({ orderBy: [{ year: 'desc' }, { order: 'asc' }] })
+
   return (
     <section>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <AdminPageHeader title="Kelola APBDes" description="Kelola data transparansi anggaran desa." />
         <AdminCrudDialog title="Tambah APBDes" description="Data terbit tampil di ringkasan transparansi." trigger="Tambah APBDes"><BudgetForm /></AdminCrudDialog>
       </div>
+      {notice.saved ? <SaveNotice type="saved" /> : null}
+      {notice.deleted ? <SaveNotice type="deleted" /> : null}
       <div className="grid gap-3">
         {items.map((item) => (
           <Card key={item.id}><CardContent className="grid gap-4 md:grid-cols-[1fr_auto] md:items-start">

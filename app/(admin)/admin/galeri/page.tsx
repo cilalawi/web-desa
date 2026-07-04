@@ -3,6 +3,7 @@ import { AdminCrudDialog } from '@/components/admin/AdminCrudDialog'
 import { AdminForm } from '@/components/admin/AdminForm'
 import { FileField, StatusField, TextAreaField, TextField } from '@/components/admin/AdminInputs'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
+import { SaveNotice } from '@/components/admin/SaveNotice'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -24,7 +25,12 @@ function GalleryForm({ item }: { item?: Item }) {
   )
 }
 
-export default async function AdminGaleriPage() {
+export default async function AdminGaleriPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ saved?: string; deleted?: string }>
+}) {
+  const notice = await searchParams
   const items = await prisma.galleryItem.findMany({ orderBy: { order: 'asc' } })
   const mediaAssetIds = items.map((item) => item.mediaAssetId).filter((id): id is string => Boolean(id))
   const mediaAssets = mediaAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: mediaAssetIds } } }) : []
@@ -36,6 +42,8 @@ export default async function AdminGaleriPage() {
         <AdminPageHeader title="Kelola Galeri" description="Tempat admin mengelola dokumentasi kegiatan desa." />
         <AdminCrudDialog title="Tambah Galeri" description="Data foto akan siap dipasangkan dengan upload gambar." trigger="Tambah Galeri"><GalleryForm /></AdminCrudDialog>
       </div>
+      {notice.saved ? <SaveNotice type="saved" /> : null}
+      {notice.deleted ? <SaveNotice type="deleted" /> : null}
       <div className="grid gap-3 md:grid-cols-3">
         {items.map((item) => {
           const image = item.mediaAssetId ? mediaAsset.get(item.mediaAssetId) : null
