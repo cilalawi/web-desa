@@ -6,6 +6,7 @@ import { ContentStatus, MediaPurpose } from '@/app/generated/prisma/client'
 import { requireAdmin } from '@/lib/admin-auth'
 import { deleteMediaAsset, optionalImageFile, uploadImageAsset } from '@/lib/media-upload'
 import { prisma } from '@/lib/prisma'
+import { buildUniqueSlug } from '@/lib/slug'
 
 // ponytail: one actions file covers all admin CRUD; split per-module when >300 LOC
 
@@ -18,10 +19,6 @@ function str(fd: FormData, key: string, label: string) {
 function optStr(fd: FormData, key: string) {
   const v = fd.get(key)
   return typeof v === 'string' && v.trim() ? v.trim() : null
-}
-
-function slug(title: string) {
-  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 }
 
 function status(fd: FormData): ContentStatus {
@@ -56,9 +53,13 @@ export async function upsertNews(fd: FormData) {
     name: title,
     alt: `Gambar sampul berita ${title}`,
   })
+  const existingSlugs = await prisma.news.findMany({
+    where: id ? { NOT: { id } } : undefined,
+    select: { slug: true },
+  })
   const data = {
     title,
-    slug: slug(title),
+    slug: buildUniqueSlug(title, existingSlugs.map((item) => item.slug)),
     excerpt,
     body,
     status: s,
@@ -96,8 +97,16 @@ export async function upsertAnnouncement(fd: FormData) {
   const summary = str(fd, 'summary', 'Ringkasan')
   const body = str(fd, 'body', 'Isi pengumuman')
   const s = status(fd)
+  const existingSlugs = await prisma.announcement.findMany({
+    where: id ? { NOT: { id } } : undefined,
+    select: { slug: true },
+  })
   const data = {
-    title, slug: slug(title), summary, body, status: s,
+    title,
+    slug: buildUniqueSlug(title, existingSlugs.map((item) => item.slug)),
+    summary,
+    body,
+    status: s,
     publishedAt: s === 'PUBLISHED' ? new Date() : null,
   }
   if (id) await prisma.announcement.update({ where: { id }, data })
@@ -126,7 +135,11 @@ export async function upsertAgenda(fd: FormData) {
   const startsAtRaw = optStr(fd, 'startsAt')
   const startsAt = startsAtRaw ? new Date(startsAtRaw) : null
   const s = status(fd)
-  const data = { title, slug: slug(title), description, location, startsAt, status: s }
+  const existingSlugs = await prisma.agenda.findMany({
+    where: id ? { NOT: { id } } : undefined,
+    select: { slug: true },
+  })
+  const data = { title, slug: buildUniqueSlug(title, existingSlugs.map((item) => item.slug)), description, location, startsAt, status: s }
   if (id) await prisma.agenda.update({ where: { id }, data })
   else await prisma.agenda.create({ data })
   revalidatePath('/admin/informasi/agenda')
@@ -215,7 +228,11 @@ export async function upsertService(fd: FormData) {
   const requirements = optStr(fd, 'requirements')
   const order = parseInt(fd.get('order') as string) || 0
   const s = status(fd)
-  const data = { title, slug: slug(title), description, requirements, order, status: s }
+  const existingSlugs = await prisma.service.findMany({
+    where: id ? { NOT: { id } } : undefined,
+    select: { slug: true },
+  })
+  const data = { title, slug: buildUniqueSlug(title, existingSlugs.map((item) => item.slug)), description, requirements, order, status: s }
   if (id) await prisma.service.update({ where: { id }, data })
   else await prisma.service.create({ data })
   revalidatePath('/admin/layanan')
@@ -283,7 +300,11 @@ export async function upsertProduct(fd: FormData) {
     name,
     alt: `Foto produk ${name}`,
   })
-  const data = { name, slug: slug(name), description, contact, status: s, ...(imageAsset ? { imageAssetId: imageAsset.id } : {}) }
+  const existingSlugs = await prisma.product.findMany({
+    where: id ? { NOT: { id } } : undefined,
+    select: { slug: true },
+  })
+  const data = { name, slug: buildUniqueSlug(name, existingSlugs.map((item) => item.slug)), description, contact, status: s, ...(imageAsset ? { imageAssetId: imageAsset.id } : {}) }
   if (id) await prisma.product.update({ where: { id }, data })
   else await prisma.product.create({ data })
   if (imageAsset && existing?.imageAssetId) await deleteMediaAsset(existing.imageAssetId)
