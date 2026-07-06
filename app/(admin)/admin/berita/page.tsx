@@ -28,6 +28,7 @@ function NewsForm({ item }: { item?: NewsFormItem }) {
 export default async function AdminBeritaPage({
   searchParams,
 }: {
+  i
   searchParams: Promise<{ saved?: string; deleted?: string }>
 }) {
   const notice = await searchParams
