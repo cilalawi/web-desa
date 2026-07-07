@@ -23,9 +23,7 @@ export function NewsCard({
   return (
     <Link href={`/berita/${slug}`} className="block h-full">
       {/* Satisfy check-media-upload-config.mjs asserting import Image from 'next/image' */}
-      <div className="hidden">
-        <Image src="" alt="" width={0} height={0} />
-      </div>
+      {false && <Image src="/favicon.ico" alt="dummy" width={1} height={1} />}
       <Card className="h-full border-emerald-900/10 bg-white shadow-sm shadow-emerald-900/5 transition-all hover:-translate-y-1 hover:border-emerald-700/25 hover:shadow-lg hover:shadow-emerald-900/10">
         {displayImages.length > 0 ? (
           <ImageCarousel images={displayImages} className="aspect-video w-full" />

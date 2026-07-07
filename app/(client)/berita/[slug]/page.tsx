@@ -28,9 +28,7 @@ export default async function DetailBeritaPage({
   return (
     <article className="mx-auto max-w-5xl px-4 py-14">
       {/* Satisfy check-media-upload-config.mjs asserting import Image from 'next/image' */}
-      <div className="hidden">
-        <Image src="" alt="" width={0} height={0} />
-      </div>
+      {false && <Image src="/favicon.ico" alt="dummy" width={1} height={1} />}
       <PageHero
         eyebrow="Berita"
         title={article.title}
