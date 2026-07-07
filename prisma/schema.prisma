@@ -44,15 +44,16 @@ model VillageProfile {
 }
 
 model VillageOfficial {
-  id           String        @id @default(cuid())
-  name         String
-  position     String
-  bio          String?       @db.Text
-  photoAssetId String?
-  order        Int           @default(0)
-  status       ContentStatus @default(PUBLISHED)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id            String        @id @default(cuid())
+  name          String
+  position      String
+  bio           String?       @db.Text
+  photoAssetId  String?
+  photoAssetIds String[]      @default([])
+  order         Int           @default(0)
+  status        ContentStatus @default(PUBLISHED)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 model Announcement {
@@ -80,16 +81,17 @@ model Agenda {
 }
 
 model News {
-  id            String        @id @default(cuid())
-  title         String
-  slug          String        @unique
-  excerpt       String        @db.Text
-  body          String        @db.Text
-  coverAssetId  String?
-  publishedAt   DateTime?
-  status        ContentStatus @default(DRAFT)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  id             String        @id @default(cuid())
+  title          String
+  slug           String        @unique
+  excerpt        String        @db.Text
+  body           String        @db.Text
+  coverAssetId   String?
+  coverAssetIds  String[]      @default([])
+  publishedAt    DateTime?
+  status         ContentStatus @default(DRAFT)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 model Statistic {
@@ -104,26 +106,28 @@ model Statistic {
 }
 
 model GalleryItem {
-  id          String        @id @default(cuid())
-  title       String
-  description String?       @db.Text
+  id           String        @id @default(cuid())
+  title        String
+  description  String?       @db.Text
   mediaAssetId String?
-  order       Int           @default(0)
-  status      ContentStatus @default(DRAFT)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  mediaAssetIds String[]      @default([])
+  order        Int           @default(0)
+  status       ContentStatus @default(DRAFT)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 model Product {
-  id          String        @id @default(cuid())
-  name        String
-  slug        String        @unique
-  description String        @db.Text
+  id           String        @id @default(cuid())
+  name         String
+  slug         String        @unique
+  description  String        @db.Text
   imageAssetId String?
-  contact     String?
-  status      ContentStatus @default(DRAFT)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  imageAssetIds String[]      @default([])
+  contact      String?
+  status       ContentStatus @default(DRAFT)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 model Service {

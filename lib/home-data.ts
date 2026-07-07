@@ -12,8 +12,8 @@ export async function getHomeData() {
     prisma.budgetItem.findMany({ where: { status: 'PUBLISHED' }, orderBy: [{ year: 'desc' }, { order: 'asc' }], take: 3 }),
     prisma.siteSetting.findMany({ where: { key: { in: SITE_SETTING_KEYS } } }),
   ])
-  const newsCoverAssetIds = newsItems.map((item) => item.coverAssetId).filter((id): id is string => Boolean(id))
-  const officialPhotoAssetIds = officials.map((official) => official.photoAssetId).filter((id): id is string => Boolean(id))
+  const newsCoverAssetIds = newsItems.flatMap((item) => [...(item.coverAssetIds || []), item.coverAssetId].filter((id): id is string => Boolean(id)))
+  const officialPhotoAssetIds = officials.flatMap((official) => [...(official.photoAssetIds || []), official.photoAssetId].filter((id): id is string => Boolean(id)))
   const mediaAssetIds = [...newsCoverAssetIds, ...officialPhotoAssetIds]
   const mediaAssets = mediaAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: mediaAssetIds } } }) : []
   const mediaAsset = new Map(mediaAssets.map((asset) => [asset.id, asset]))

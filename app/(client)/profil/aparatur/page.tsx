@@ -1,5 +1,5 @@
-import Image from 'next/image'
 import { EmptyState } from '@/components/public/EmptyState'
+import { ImageCarousel } from '@/components/public/ImageCarousel'
 import { PageHero } from '@/components/public/PageHero'
 import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
@@ -26,7 +26,7 @@ export default async function AparaturPage() {
     where: { status: 'PUBLISHED' },
     orderBy: { order: 'asc' },
   })
-  const photoAssetIds = officials.map((official) => official.photoAssetId).filter((id): id is string => Boolean(id))
+  const photoAssetIds = officials.flatMap((official) => [...(official.photoAssetIds || []), official.photoAssetId].filter((id): id is string => Boolean(id)))
   const mediaAssets = photoAssetIds.length
     ? await prisma.mediaAsset.findMany({ where: { id: { in: photoAssetIds } } })
     : []
@@ -38,17 +38,18 @@ export default async function AparaturPage() {
       <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {officials.length ? (
           officials.map((official) => {
-            const photo = official.photoAssetId ? mediaAsset.get(official.photoAssetId) : null
+            const itemImages = (official.photoAssetIds || []).length
+              ? official.photoAssetIds.map((id) => mediaAsset.get(id)).filter((img): img is NonNullable<typeof img> => Boolean(img))
+              : official.photoAssetId
+              ? [mediaAsset.get(official.photoAssetId)].filter((img): img is NonNullable<typeof img> => Boolean(img))
+              : []
             return (
               <Card key={official.id} className="border-emerald-900/10 bg-white shadow-sm shadow-emerald-900/5 transition-all hover:-translate-y-1 hover:shadow-lg">
                 <CardContent className="p-5">
-                  {photo ? (
-                    <Image
-                      src={photo.url}
-                      alt={photo.alt}
-                      width={360}
-                      height={360}
-                      className="mb-5 aspect-square rounded-[1.5rem] object-cover"
+                  {itemImages.length > 0 ? (
+                    <ImageCarousel
+                      images={itemImages}
+                      className="mb-5 aspect-square rounded-[1.5rem] overflow-hidden"
                     />
                   ) : (
                     <MockOfficialPhoto name={official.name} />

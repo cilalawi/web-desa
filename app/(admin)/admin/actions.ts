@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { ContentStatus, MediaPurpose } from '@/app/generated/prisma/client'
 import { requireAdmin } from '@/lib/admin-auth'
-import { deleteMediaAsset, optionalImageFile, uploadImageAsset } from '@/lib/media-upload'
+import { deleteMediaAsset, optionalImageFile, uploadImageAsset, multipleImageFiles } from '@/lib/media-upload'
 import { prisma } from '@/lib/prisma'
 import { buildUniqueSlug } from '@/lib/slug'
 
@@ -37,6 +37,25 @@ async function uploadOptionalImage(
   return uploadImageAsset(file, options)
 }
 
+async function uploadMultipleImages(
+  fd: FormData,
+  key: string,
+  options: { purpose: MediaPurpose; folder: string; name: string; alt: string }
+) {
+  const files = multipleImageFiles(fd, key)
+  if (!files || files.length === 0) return []
+  const assets = []
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
+    const asset = await uploadImageAsset(file, {
+      ...options,
+      alt: `${options.alt} ${i + 1}`,
+    })
+    assets.push(asset)
+  }
+  return assets
+}
+
 // ── News ──
 
 export async function upsertNews(fd: FormData) {
@@ -46,13 +65,18 @@ export async function upsertNews(fd: FormData) {
   const excerpt = str(fd, 'excerpt', 'Ringkasan')
   const body = str(fd, 'body', 'Isi berita')
   const s = status(fd)
-  const existing = id ? await prisma.news.findUnique({ where: { id }, select: { coverAssetId: true } }) : null
-  const coverAsset = await uploadOptionalImage(fd, 'coverImage', {
+  const keptImageIds = fd.getAll('keptImageIds') as string[]
+  const existing = id ? await prisma.news.findUnique({ where: { id }, select: { coverAssetId: true, coverAssetIds: true } }) : null
+  const newAssets = await uploadMultipleImages(fd, 'coverImage', {
     purpose: MediaPurpose.COVER,
     folder: 'berita',
     name: title,
     alt: `Gambar sampul berita ${title}`,
   })
+  const newAssetIds = newAssets.map((asset) => asset.id)
+  const coverAssetIds = [...keptImageIds, ...newAssetIds]
+  const coverAssetId = coverAssetIds[0] || null
+
   const existingSlugs = await prisma.news.findMany({
     where: id ? { NOT: { id } } : undefined,
     select: { slug: true },
@@ -64,11 +88,18 @@ export async function upsertNews(fd: FormData) {
     body,
     status: s,
     publishedAt: s === 'PUBLISHED' ? new Date() : null,
-    ...(coverAsset ? { coverAssetId: coverAsset.id } : {}),
+    coverAssetId,
+    coverAssetIds,
   }
   if (id) await prisma.news.update({ where: { id }, data })
   else await prisma.news.create({ data })
-  if (coverAsset && existing?.coverAssetId) await deleteMediaAsset(existing.coverAssetId)
+
+  const originalIds = existing ? (existing.coverAssetIds.length ? existing.coverAssetIds : (existing.coverAssetId ? [existing.coverAssetId] : [])) : []
+  const idsToDelete = originalIds.filter((oid) => !keptImageIds.includes(oid))
+  for (const oid of idsToDelete) {
+    await deleteMediaAsset(oid)
+  }
+
   revalidatePath('/admin/berita')
   revalidatePath('/berita')
   revalidatePath(`/berita/${data.slug}`)
@@ -79,9 +110,12 @@ export async function upsertNews(fd: FormData) {
 export async function deleteNews(fd: FormData) {
   await requireAdmin()
   const id = str(fd, 'id', 'ID')
-  const item = await prisma.news.findUnique({ where: { id }, select: { coverAssetId: true } })
+  const item = await prisma.news.findUnique({ where: { id }, select: { coverAssetId: true, coverAssetIds: true } })
   await prisma.news.delete({ where: { id } })
-  await deleteMediaAsset(item?.coverAssetId)
+  const idsToDelete = item ? (item.coverAssetIds.length ? item.coverAssetIds : (item.coverAssetId ? [item.coverAssetId] : [])) : []
+  for (const assetId of idsToDelete) {
+    await deleteMediaAsset(assetId)
+  }
   revalidatePath('/admin/berita')
   revalidatePath('/berita')
   revalidatePath('/')
@@ -191,17 +225,28 @@ export async function upsertOfficial(fd: FormData) {
   const bio = optStr(fd, 'bio')
   const order = parseInt(fd.get('order') as string) || 0
   const s = status(fd)
-  const existing = id ? await prisma.villageOfficial.findUnique({ where: { id }, select: { photoAssetId: true } }) : null
-  const photoAsset = await uploadOptionalImage(fd, 'photo', {
+  const keptImageIds = fd.getAll('keptImageIds') as string[]
+  const existing = id ? await prisma.villageOfficial.findUnique({ where: { id }, select: { photoAssetId: true, photoAssetIds: true } }) : null
+  const newAssets = await uploadMultipleImages(fd, 'photo', {
     purpose: MediaPurpose.OFFICIAL_PHOTO,
     folder: 'aparatur',
     name,
     alt: `Foto aparatur desa ${name}`,
   })
-  const data = { name, position, bio, order, status: s, ...(photoAsset ? { photoAssetId: photoAsset.id } : {}) }
+  const newAssetIds = newAssets.map((asset) => asset.id)
+  const photoAssetIds = [...keptImageIds, ...newAssetIds]
+  const photoAssetId = photoAssetIds[0] || null
+
+  const data = { name, position, bio, order, status: s, photoAssetId, photoAssetIds }
   if (id) await prisma.villageOfficial.update({ where: { id }, data })
   else await prisma.villageOfficial.create({ data })
-  if (photoAsset && existing?.photoAssetId) await deleteMediaAsset(existing.photoAssetId)
+
+  const originalIds = existing ? (existing.photoAssetIds.length ? existing.photoAssetIds : (existing.photoAssetId ? [existing.photoAssetId] : [])) : []
+  const idsToDelete = originalIds.filter((oid) => !keptImageIds.includes(oid))
+  for (const oid of idsToDelete) {
+    await deleteMediaAsset(oid)
+  }
+
   revalidatePath('/admin/profil/aparatur')
   revalidatePath('/profil/aparatur')
   redirect('/admin/profil/aparatur?saved=1')
@@ -210,9 +255,12 @@ export async function upsertOfficial(fd: FormData) {
 export async function deleteOfficial(fd: FormData) {
   await requireAdmin()
   const id = str(fd, 'id', 'ID')
-  const item = await prisma.villageOfficial.findUnique({ where: { id }, select: { photoAssetId: true } })
+  const item = await prisma.villageOfficial.findUnique({ where: { id }, select: { photoAssetId: true, photoAssetIds: true } })
   await prisma.villageOfficial.delete({ where: { id } })
-  await deleteMediaAsset(item?.photoAssetId)
+  const idsToDelete = item ? (item.photoAssetIds.length ? item.photoAssetIds : (item.photoAssetId ? [item.photoAssetId] : [])) : []
+  for (const assetId of idsToDelete) {
+    await deleteMediaAsset(assetId)
+  }
   revalidatePath('/admin/profil/aparatur')
   revalidatePath('/profil/aparatur')
   redirect('/admin/profil/aparatur?deleted=1')
@@ -257,17 +305,28 @@ export async function upsertGalleryItem(fd: FormData) {
   const description = optStr(fd, 'description')
   const order = parseInt(fd.get('order') as string) || 0
   const s = status(fd)
-  const existing = id ? await prisma.galleryItem.findUnique({ where: { id }, select: { mediaAssetId: true } }) : null
-  const mediaAsset = await uploadOptionalImage(fd, 'image', {
+  const keptImageIds = fd.getAll('keptImageIds') as string[]
+  const existing = id ? await prisma.galleryItem.findUnique({ where: { id }, select: { mediaAssetId: true, mediaAssetIds: true } }) : null
+  const newAssets = await uploadMultipleImages(fd, 'image', {
     purpose: MediaPurpose.GALLERY,
     folder: 'galeri',
     name: title,
     alt: `Foto galeri ${title}`,
   })
-  const data = { title, description, order, status: s, ...(mediaAsset ? { mediaAssetId: mediaAsset.id } : {}) }
+  const newAssetIds = newAssets.map((asset) => asset.id)
+  const mediaAssetIds = [...keptImageIds, ...newAssetIds]
+  const mediaAssetId = mediaAssetIds[0] || null
+
+  const data = { title, description, order, status: s, mediaAssetId, mediaAssetIds }
   if (id) await prisma.galleryItem.update({ where: { id }, data })
   else await prisma.galleryItem.create({ data })
-  if (mediaAsset && existing?.mediaAssetId) await deleteMediaAsset(existing.mediaAssetId)
+
+  const originalIds = existing ? (existing.mediaAssetIds.length ? existing.mediaAssetIds : (existing.mediaAssetId ? [existing.mediaAssetId] : [])) : []
+  const idsToDelete = originalIds.filter((oid) => !keptImageIds.includes(oid))
+  for (const oid of idsToDelete) {
+    await deleteMediaAsset(oid)
+  }
+
   revalidatePath('/admin/galeri')
   revalidatePath('/galeri')
   redirect('/admin/galeri?saved=1')
@@ -276,9 +335,12 @@ export async function upsertGalleryItem(fd: FormData) {
 export async function deleteGalleryItem(fd: FormData) {
   await requireAdmin()
   const id = str(fd, 'id', 'ID')
-  const item = await prisma.galleryItem.findUnique({ where: { id }, select: { mediaAssetId: true } })
+  const item = await prisma.galleryItem.findUnique({ where: { id }, select: { mediaAssetId: true, mediaAssetIds: true } })
   await prisma.galleryItem.delete({ where: { id } })
-  await deleteMediaAsset(item?.mediaAssetId)
+  const idsToDelete = item ? (item.mediaAssetIds.length ? item.mediaAssetIds : (item.mediaAssetId ? [item.mediaAssetId] : [])) : []
+  for (const assetId of idsToDelete) {
+    await deleteMediaAsset(assetId)
+  }
   revalidatePath('/admin/galeri')
   revalidatePath('/galeri')
   redirect('/admin/galeri?deleted=1')
@@ -293,21 +355,32 @@ export async function upsertProduct(fd: FormData) {
   const description = str(fd, 'description', 'Deskripsi')
   const contact = optStr(fd, 'contact')
   const s = status(fd)
-  const existing = id ? await prisma.product.findUnique({ where: { id }, select: { imageAssetId: true } }) : null
-  const imageAsset = await uploadOptionalImage(fd, 'image', {
+  const keptImageIds = fd.getAll('keptImageIds') as string[]
+  const existing = id ? await prisma.product.findUnique({ where: { id }, select: { imageAssetId: true, imageAssetIds: true } }) : null
+  const newAssets = await uploadMultipleImages(fd, 'image', {
     purpose: MediaPurpose.PRODUCT_IMAGE,
     folder: 'produk',
     name,
     alt: `Foto produk ${name}`,
   })
+  const newAssetIds = newAssets.map((asset) => asset.id)
+  const imageAssetIds = [...keptImageIds, ...newAssetIds]
+  const imageAssetId = imageAssetIds[0] || null
+
   const existingSlugs = await prisma.product.findMany({
     where: id ? { NOT: { id } } : undefined,
     select: { slug: true },
   })
-  const data = { name, slug: buildUniqueSlug(name, existingSlugs.map((item) => item.slug)), description, contact, status: s, ...(imageAsset ? { imageAssetId: imageAsset.id } : {}) }
+  const data = { name, slug: buildUniqueSlug(name, existingSlugs.map((item) => item.slug)), description, contact, status: s, imageAssetId, imageAssetIds }
   if (id) await prisma.product.update({ where: { id }, data })
   else await prisma.product.create({ data })
-  if (imageAsset && existing?.imageAssetId) await deleteMediaAsset(existing.imageAssetId)
+
+  const originalIds = existing ? (existing.imageAssetIds.length ? existing.imageAssetIds : (existing.imageAssetId ? [existing.imageAssetId] : [])) : []
+  const idsToDelete = originalIds.filter((oid) => !keptImageIds.includes(oid))
+  for (const oid of idsToDelete) {
+    await deleteMediaAsset(oid)
+  }
+
   revalidatePath('/admin/produk')
   revalidatePath('/produk')
   redirect('/admin/produk?saved=1')
@@ -316,9 +389,12 @@ export async function upsertProduct(fd: FormData) {
 export async function deleteProduct(fd: FormData) {
   await requireAdmin()
   const id = str(fd, 'id', 'ID')
-  const item = await prisma.product.findUnique({ where: { id }, select: { imageAssetId: true } })
+  const item = await prisma.product.findUnique({ where: { id }, select: { imageAssetId: true, imageAssetIds: true } })
   await prisma.product.delete({ where: { id } })
-  await deleteMediaAsset(item?.imageAssetId)
+  const idsToDelete = item ? (item.imageAssetIds.length ? item.imageAssetIds : (item.imageAssetId ? [item.imageAssetId] : [])) : []
+  for (const assetId of idsToDelete) {
+    await deleteMediaAsset(assetId)
+  }
   revalidatePath('/admin/produk')
   revalidatePath('/produk')
   redirect('/admin/produk?deleted=1')

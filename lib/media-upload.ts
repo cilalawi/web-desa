@@ -23,6 +23,11 @@ export function optionalImageFile(fd: FormData, key: string) {
   return null
 }
 
+export function multipleImageFiles(fd: FormData, key: string) {
+  const values = fd.getAll(key)
+  return values.filter((value): value is File => value instanceof File && value.size > 0)
+}
+
 export async function uploadImageAsset(
   file: File,
   {

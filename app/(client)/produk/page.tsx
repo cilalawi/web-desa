@@ -1,5 +1,5 @@
-import Image from 'next/image'
 import { EmptyState } from '@/components/public/EmptyState'
+import { ImageCarousel } from '@/components/public/ImageCarousel'
 import { PageHero } from '@/components/public/PageHero'
 import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
@@ -13,7 +13,7 @@ export default async function ProdukPage() {
     }),
     getSiteSettings(['empty.products']),
   ])
-  const imageAssetIds = products.map((product) => product.imageAssetId).filter((id): id is string => Boolean(id))
+  const imageAssetIds = products.flatMap((product) => [...(product.imageAssetIds || []), product.imageAssetId].filter((id): id is string => Boolean(id)))
   const mediaAssets = imageAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: imageAssetIds } } }) : []
   const mediaAsset = new Map(mediaAssets.map((asset) => [asset.id, asset]))
 
@@ -23,12 +23,16 @@ export default async function ProdukPage() {
       <div className="mt-8 grid gap-5 md:grid-cols-3">
         {products.length ? (
           products.map((product) => {
-            const photo = product.imageAssetId ? mediaAsset.get(product.imageAssetId) : null
+            const itemImages = (product.imageAssetIds || []).length
+              ? product.imageAssetIds.map((id) => mediaAsset.get(id)).filter((img): img is NonNullable<typeof img> => Boolean(img))
+              : product.imageAssetId
+              ? [mediaAsset.get(product.imageAssetId)].filter((img): img is NonNullable<typeof img> => Boolean(img))
+              : []
             return (
               <Card key={product.id} className="border-emerald-900/10 bg-white shadow-sm shadow-emerald-900/5 transition-all hover:-translate-y-1 hover:shadow-lg">
                 <CardContent className="p-5">
-                  {photo ? (
-                    <Image src={photo.url} alt={photo.alt} width={640} height={420} className="mb-4 aspect-video rounded-[1.25rem] object-cover" />
+                  {itemImages.length > 0 ? (
+                    <ImageCarousel images={itemImages} className="mb-4 aspect-video rounded-[1.25rem] overflow-hidden" />
                   ) : null}
                   <p className="text-lg font-bold text-emerald-950">{product.name}</p>
                   <p className="mt-2 text-sm leading-6 text-emerald-950/65">{product.description}</p>

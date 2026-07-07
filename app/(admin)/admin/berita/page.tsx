@@ -10,16 +10,30 @@ import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
 import { deleteNews, upsertNews } from '../actions'
 
-type NewsFormItem = { id?: string; title?: string; excerpt?: string; body?: string; coverAssetId?: string | null; status?: string }
+type NewsFormItem = {
+  id?: string
+  title?: string
+  excerpt?: string
+  body?: string
+  coverAssetId?: string | null
+  coverAssetIds?: string[]
+  status?: string
+}
 
-function NewsForm({ item }: { item?: NewsFormItem }) {
+function NewsForm({
+  item,
+  currentImages = [],
+}: {
+  item?: NewsFormItem
+  currentImages?: { id: string; url: string; alt: string }[]
+}) {
   return (
     <AdminForm action={upsertNews}>
       {item?.id ? <input type="hidden" name="id" value={item.id} /> : null}
       <TextField name="title" label="Judul" defaultValue={item?.title} />
       <TextAreaField name="excerpt" label="Ringkasan" defaultValue={item?.excerpt} />
       <TextAreaField name="body" label="Isi berita" defaultValue={item?.body} />
-      <FileField name="coverImage" label="Gambar sampul berita" />
+      <FileField name="coverImage" label="Gambar sampul berita" currentImages={currentImages} />
       <StatusField defaultValue={item?.status ?? 'DRAFT'} />
     </AdminForm>
   )
@@ -28,12 +42,11 @@ function NewsForm({ item }: { item?: NewsFormItem }) {
 export default async function AdminBeritaPage({
   searchParams,
 }: {
-  i
   searchParams: Promise<{ saved?: string; deleted?: string }>
 }) {
   const notice = await searchParams
   const items = await prisma.news.findMany({ orderBy: { updatedAt: 'desc' } })
-  const coverAssetIds = items.map((item) => item.coverAssetId).filter((id): id is string => Boolean(id))
+  const coverAssetIds = items.flatMap((item) => [...(item.coverAssetIds || []), item.coverAssetId].filter((id): id is string => Boolean(id)))
   const mediaAssets = coverAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: coverAssetIds } } }) : []
   const mediaAsset = new Map(mediaAssets.map((asset) => [asset.id, asset]))
 
@@ -49,7 +62,12 @@ export default async function AdminBeritaPage({
       {notice.deleted ? <SaveNotice type="deleted" /> : null}
       <div className="grid gap-3">
         {items.map((item) => {
-          const cover = item.coverAssetId ? mediaAsset.get(item.coverAssetId) : null
+          const itemImages = (item.coverAssetIds || []).length
+            ? item.coverAssetIds.map((id) => mediaAsset.get(id)).filter((img): img is NonNullable<typeof img> => Boolean(img))
+            : item.coverAssetId
+            ? [mediaAsset.get(item.coverAssetId)].filter((img): img is NonNullable<typeof img> => Boolean(img))
+            : []
+          const cover = itemImages[0]
           return (
             <Card key={item.id}>
               <CardContent className="grid gap-4 md:grid-cols-[12rem_1fr_auto] md:items-start">
@@ -65,7 +83,7 @@ export default async function AdminBeritaPage({
                 </div>
                 <div className="flex gap-2">
                   <AdminCrudDialog title="Edit Berita" description="Perbarui berita desa." trigger="Edit">
-                    <NewsForm item={item} />
+                    <NewsForm item={item} currentImages={itemImages} />
                   </AdminCrudDialog>
                   <form action={deleteNews}>
                     <input type="hidden" name="id" value={item.id} />

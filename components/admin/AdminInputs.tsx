@@ -11,13 +11,28 @@ export function TextField({ name, label, defaultValue = '', type = 'text', requi
   )
 }
 
-export function FileField({ name, label, accept = 'image/*' }: { name: string; label: string; accept?: string }) {
+import { ImageUploadField } from './ImageUploadField'
+
+type DBImage = { id: string; url: string; alt: string }
+
+export function FileField({
+  name,
+  label,
+  accept = 'image/*',
+  currentImages = [],
+}: {
+  name: string
+  label: string
+  accept?: string
+  currentImages?: DBImage[]
+}) {
   return (
-    <div className="grid gap-2">
-      <Label htmlFor={name}>{label}</Label>
-      <Input id={name} name={name} type="file" accept={accept} />
-      <p className="text-xs text-muted-foreground">Opsional. Format JPG, PNG, WebP, atau AVIF. Maksimal 5 MB.</p>
-    </div>
+    <>
+      <div className="hidden">
+        <input type="file" accept={accept} readOnly />
+      </div>
+      <ImageUploadField name={name} label={label} currentImages={currentImages} />
+    </>
   )
 }
 

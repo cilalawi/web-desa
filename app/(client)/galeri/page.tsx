@@ -1,5 +1,5 @@
-import Image from 'next/image'
 import { EmptyState } from '@/components/public/EmptyState'
+import { ImageCarousel } from '@/components/public/ImageCarousel'
 import { PageHero } from '@/components/public/PageHero'
 import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
@@ -13,7 +13,7 @@ export default async function GaleriPage() {
     }),
     getSiteSettings(['empty.gallery']),
   ])
-  const mediaAssetIds = items.map((item) => item.mediaAssetId).filter((id): id is string => Boolean(id))
+  const mediaAssetIds = items.flatMap((item) => [...(item.mediaAssetIds || []), item.mediaAssetId].filter((id): id is string => Boolean(id)))
   const mediaAssets = mediaAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: mediaAssetIds } } }) : []
   const mediaAsset = new Map(mediaAssets.map((asset) => [asset.id, asset]))
 
@@ -23,12 +23,16 @@ export default async function GaleriPage() {
       <div className="mt-8 grid gap-5 md:grid-cols-3">
         {items.length ? (
           items.map((item) => {
-            const photo = item.mediaAssetId ? mediaAsset.get(item.mediaAssetId) : null
+            const itemImages = (item.mediaAssetIds || []).length
+              ? item.mediaAssetIds.map((id) => mediaAsset.get(id)).filter((img): img is NonNullable<typeof img> => Boolean(img))
+              : item.mediaAssetId
+              ? [mediaAsset.get(item.mediaAssetId)].filter((img): img is NonNullable<typeof img> => Boolean(img))
+              : []
             return (
               <Card key={item.id} className="overflow-hidden border-emerald-900/10 bg-white shadow-sm shadow-emerald-900/5 transition-all hover:-translate-y-1 hover:shadow-lg">
                 <CardContent className="p-5">
-                  {photo ? (
-                    <Image src={photo.url} alt={photo.alt} width={640} height={420} className="mb-4 aspect-video rounded-[1.25rem] object-cover" />
+                  {itemImages.length > 0 ? (
+                    <ImageCarousel images={itemImages} className="mb-4 aspect-video rounded-[1.25rem] overflow-hidden" />
                   ) : null}
                   <p className="text-lg font-bold text-emerald-950">{item.title}</p>
                   {item.description ? <p className="mt-2 text-sm leading-6 text-emerald-950/65">{item.description}</p> : null}

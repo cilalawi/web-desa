@@ -12,7 +12,7 @@ export default async function BeritaPage() {
     }),
     getSiteSettings(['empty.news']),
   ])
-  const coverAssetIds = news.map((item) => item.coverAssetId).filter((id): id is string => Boolean(id))
+  const coverAssetIds = news.flatMap((item) => [...(item.coverAssetIds || []), item.coverAssetId].filter((id): id is string => Boolean(id)))
   const mediaAssets = coverAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: coverAssetIds } } }) : []
   const mediaAsset = new Map(mediaAssets.map((asset) => [asset.id, asset]))
 
@@ -21,15 +21,23 @@ export default async function BeritaPage() {
       <PageHero eyebrow="Berita" title="Berita Desa" description="Kabar terbaru, dokumentasi kegiatan, dan informasi pembangunan Desa Cilalawi." />
       <div className="mt-8 grid gap-5 md:grid-cols-3">
         {news.length ? (
-          news.map((item) => (
-            <NewsCard
-              key={item.id}
-              title={item.title}
-              slug={item.slug}
-              excerpt={item.excerpt}
-              image={item.coverAssetId ? mediaAsset.get(item.coverAssetId) : null}
-            />
-          ))
+          news.map((item) => {
+            const itemImages = (item.coverAssetIds || []).length
+              ? item.coverAssetIds.map((id) => mediaAsset.get(id)).filter((img): img is NonNullable<typeof img> => Boolean(img))
+              : item.coverAssetId
+              ? [mediaAsset.get(item.coverAssetId)].filter((img): img is NonNullable<typeof img> => Boolean(img))
+              : []
+            return (
+              <NewsCard
+                key={item.id}
+                title={item.title}
+                slug={item.slug}
+                excerpt={item.excerpt}
+                image={item.coverAssetId ? mediaAsset.get(item.coverAssetId) : null}
+                images={itemImages}
+              />
+            )
+          })
         ) : (
           <EmptyState className="md:col-span-3" message={settingValue(settings, 'empty.news')} />
         )}

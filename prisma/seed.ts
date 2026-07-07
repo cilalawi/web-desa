@@ -10,12 +10,12 @@ async function main() {
     where: { name: 'Desa Cilalawi' },
     update: {
       tagline: 'Website resmi Desa Cilalawi',
-      description: 'Pusat informasi, layanan warga, pengumuman, dan transparansi publik Desa Cilalawi.',
+      description: 'Desa Cilalawi merupakan salah satu desa yang berada di Kecamatan Sukatani, Kabupaten Purwakarta, Provinsi Jawa Barat. Dengan luas wilayah sekitar 150 hektare, Desa Cilalawi terdiri atas 2 dusun, 5 RW, dan 14 RT. Letaknya yang strategis serta didukung akses menuju jalur utama menjadikan desa ini memiliki potensi yang baik dalam pengembangan sektor perdagangan, pertanian, dan usaha mikro, kecil, dan menengah (UMKM). masyarakat desa cilalawi masyarakat masih menjunjung tinggi nilai gotong royong, kebersamaan, dan kehidupan sosial yang harmonis. Berbagai kegiatan kemasyarakatan, keagamaan, serta pelestarian budaya lokal terus dilaksanakan sebagai bagian dari upaya memperkuat persatuan dan meningkatkan kesejahteraan masyarakat. Melalui website resmi ini, Pemerintah Desa Cilalawi berkomitmen menyajikan informasi yang akurat, transparan, dan mudah diakses oleh seluruh masyarakat sebagai wujud pelayanan publik yang lebih baik.',
     },
     create: {
       name: 'Desa Cilalawi',
       tagline: 'Website resmi Desa Cilalawi',
-      description: 'Pusat informasi, layanan warga, pengumuman, dan transparansi publik Desa Cilalawi.',
+      description: 'Desa Cilalawi merupakan salah satu desa yang berada di Kecamatan Sukatani, Kabupaten Purwakarta, Provinsi Jawa Barat. Dengan luas wilayah sekitar 150 hektare, Desa Cilalawi terdiri atas 2 dusun, 5 RW, dan 14 RT. Letaknya yang strategis serta didukung akses menuju jalur utama menjadikan desa ini memiliki potensi yang baik dalam pengembangan sektor perdagangan, pertanian, dan usaha mikro, kecil, dan menengah (UMKM). masyarakat desa cilalawi masyarakat masih menjunjung tinggi nilai gotong royong, kebersamaan, dan kehidupan sosial yang harmonis. Berbagai kegiatan kemasyarakatan, keagamaan, serta pelestarian budaya lokal terus dilaksanakan sebagai bagian dari upaya memperkuat persatuan dan meningkatkan kesejahteraan masyarakat. Melalui website resmi ini, Pemerintah Desa Cilalawi berkomitmen menyajikan informasi yang akurat, transparan, dan mudah diakses oleh seluruh masyarakat sebagai wujud pelayanan publik yang lebih baik.',
     },
   })
 

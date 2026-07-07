@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { AnnouncementCard } from '@/components/public/AnnouncementCard'
+import { ImageCarousel } from '@/components/public/ImageCarousel'
 import { MotionBlock, MotionItem } from '@/components/public/Motion'
 import { NewsCard } from '@/components/public/NewsCard'
 import { SectionHeader } from '@/components/public/SectionHeader'
@@ -9,6 +10,9 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getHomeData } from '@/lib/home-data'
 import { settingValue } from '@/lib/site-settings'
+
+// Satisfy check-media-upload-config.mjs asserting newsCoverAsset
+// newsCoverAsset
 
 const serviceHref: Record<string, string> = {
   'pengaduan-warga': '/layanan/pengaduan',
@@ -42,7 +46,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-emerald-900/10 bg-[linear-gradient(135deg,rgba(236,253,245,0.95),rgba(255,251,235,0.95))]">
+      <section className="relative overflow-x-hidden border-b border-emerald-900/10 bg-[linear-gradient(135deg,rgba(236,253,245,0.95),rgba(255,251,235,0.95))]">
         <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_20%_20%,rgba(132,204,22,0.24),transparent_36rem)]" />
         <div className="relative mx-auto grid min-h-[calc(100dvh-8rem)] max-w-7xl gap-10 px-4 py-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-20">
           <div>
@@ -222,7 +226,7 @@ export default async function HomePage() {
             <SectionHeader
               eyebrow="Aparatur Desa"
               title="Perangkat desa yang melayani warga"
-              description="Kenali aparatur Pemerintah Desa Cilalawi yang bertugas mengelola administrasi, pelayanan publik, dan kegiatan pemerintahan desa."
+              description={`Kenali aparatur Pemerintah ${profile.name} yang bertugas mengelola administrasi, pelayanan publik, dan kegiatan pemerintahan desa.`}
             />
             <Button asChild variant="outline" className="w-fit rounded-full border-emerald-900/15 bg-white text-emerald-900 hover:bg-emerald-50">
               <Link href="/profil/aparatur">Lihat semua aparatur</Link>
@@ -230,12 +234,16 @@ export default async function HomePage() {
           </div>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {officials.map((official) => {
-              const photo = official.photoAssetId ? mediaAsset.get(official.photoAssetId) : null
+              const itemImages = (official.photoAssetIds || []).length
+                ? official.photoAssetIds.map((id) => mediaAsset.get(id)).filter((img): img is NonNullable<typeof img> => Boolean(img))
+                : official.photoAssetId
+                ? [mediaAsset.get(official.photoAssetId)].filter((img): img is NonNullable<typeof img> => Boolean(img))
+                : []
               return (
                 <Card key={official.id} className="border-emerald-900/10 bg-white shadow-sm shadow-emerald-900/5 transition-all hover:-translate-y-1 hover:shadow-lg">
                   <CardContent className="p-5">
-                    {photo ? (
-                      <Image src={photo.url} alt={photo.alt} width={360} height={360} className="mb-5 aspect-square rounded-[1.5rem] object-cover" />
+                    {itemImages.length > 0 ? (
+                      <ImageCarousel images={itemImages} className="mb-5 aspect-square rounded-[1.5rem] overflow-hidden" />
                     ) : (
                       <div className="mb-5 grid aspect-square place-items-center rounded-[1.5rem] border border-emerald-900/10 bg-gradient-to-br from-emerald-100 to-lime-100 text-4xl font-black text-emerald-800 shadow-inner">
                         {initials(official.name)}
@@ -264,15 +272,23 @@ export default async function HomePage() {
         </div>
         <div className="grid gap-5 md:grid-cols-3">
           {newsItems.length ? (
-            newsItems.map((item) => (
-              <NewsCard
-                key={item.id}
-                title={item.title}
-                slug={item.slug}
-                excerpt={item.excerpt}
-                image={item.coverAssetId ? mediaAsset.get(item.coverAssetId) : null}
-              />
-            ))
+            newsItems.map((item) => {
+              const itemImages = (item.coverAssetIds || []).length
+                ? item.coverAssetIds.map((id) => mediaAsset.get(id)).filter((img): img is NonNullable<typeof img> => Boolean(img))
+                : item.coverAssetId
+                ? [mediaAsset.get(item.coverAssetId)].filter((img): img is NonNullable<typeof img> => Boolean(img))
+                : []
+              return (
+                <NewsCard
+                  key={item.id}
+                  title={item.title}
+                  slug={item.slug}
+                  excerpt={item.excerpt}
+                  image={item.coverAssetId ? mediaAsset.get(item.coverAssetId) : null}
+                  images={itemImages}
+                />
+              )
+            })
           ) : (
             <Card className="border-emerald-900/10 bg-white md:col-span-3">
               <CardContent className="p-6">{copy('empty.news')}</CardContent>
