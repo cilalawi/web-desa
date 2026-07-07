@@ -26,7 +26,6 @@ export function BudgetDonutChart({ items }: { items: BudgetItem[] }) {
 
   const totalNum = parsedItems.reduce((acc, curr) => acc + curr.numValue, 0)
 
-  // If no numeric values exist, fallback to mock proportions for visual rendering
   const hasData = totalNum > 0
   const chartData = parsedItems.map((item, idx) => {
     const share = hasData ? item.numValue / totalNum : 1 / items.length
@@ -55,14 +54,6 @@ export function BudgetDonutChart({ items }: { items: BudgetItem[] }) {
     'stroke-emerald-300 fill-none', // 5th if any
   ]
 
-  const hoverColors = [
-    'stroke-emerald-900',
-    'stroke-emerald-600',
-    'stroke-lime-600',
-    'stroke-teal-600',
-    'stroke-emerald-400',
-  ]
-
   const fillColors = [
     'bg-emerald-800',
     'bg-emerald-500',
@@ -73,15 +64,15 @@ export function BudgetDonutChart({ items }: { items: BudgetItem[] }) {
 
   // Donut SVG layout details
   const size = 260
-  const radius = 80
-  const strokeWidth = 22
+  const radius = 85
+  const strokeWidth = 20
   const center = size / 2
   const circumference = 2 * Math.PI * radius
 
   let accumulatedPercentage = 0
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 text-emerald-950">
+    <div className="flex flex-col items-center justify-center p-2 text-emerald-950">
       <div className="relative size-[260px]">
         {/* SVG Donut */}
         <svg
@@ -106,9 +97,7 @@ export function BudgetDonutChart({ items }: { items: BudgetItem[] }) {
             accumulatedPercentage += item.share * 100
 
             const isHovered = hoveredIdx === idx
-            const colorClass = isHovered
-              ? hoverColors[idx % hoverColors.length]
-              : colors[idx % colors.length]
+            const baseColorClass = colors[idx % colors.length]
 
             return (
               <circle
@@ -116,8 +105,12 @@ export function BudgetDonutChart({ items }: { items: BudgetItem[] }) {
                 cx={center}
                 cy={center}
                 r={radius}
-                className={`transition-all duration-300 cursor-pointer ${colorClass}`}
-                strokeWidth={isHovered ? strokeWidth + 3 : strokeWidth}
+                className={`cursor-pointer ${baseColorClass}`}
+                style={{
+                  strokeWidth: isHovered ? strokeWidth + 3 : strokeWidth,
+                  opacity: hoveredIdx === null ? 1 : isHovered ? 1 : 0.45,
+                  transition: 'stroke-width 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease',
+                }}
                 strokeDasharray={strokeDasharray}
                 strokeDashoffset={strokeDashoffset}
                 strokeLinecap="round"
@@ -131,54 +124,50 @@ export function BudgetDonutChart({ items }: { items: BudgetItem[] }) {
         {/* Center Text Container */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 pointer-events-none">
           {hoveredIdx !== null ? (
-            <>
-              <p className="text-[0.62rem] font-black uppercase tracking-[0.2em] text-emerald-700 w-44 truncate">
+            <div className="flex flex-col items-center justify-center animate-fade-in">
+              <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] text-emerald-700 w-36 truncate">
                 {chartData[hoveredIdx].label}
               </p>
-              <p className="mt-1.5 text-base font-black text-emerald-950 leading-tight w-44 truncate">
+              <p className="mt-1 text-base font-black text-emerald-950 leading-tight w-36 truncate">
                 {chartData[hoveredIdx].value}
               </p>
               {hasData && (
-                <p className="mt-1 text-xs font-semibold text-emerald-800">
+                <p className="mt-1 text-[0.65rem] font-bold text-emerald-800/80">
                   {chartData[hoveredIdx].percentage}% dari total
                 </p>
               )}
-            </>
+            </div>
           ) : (
-            <>
-              <p className="text-[0.62rem] font-black uppercase tracking-[0.2em] text-emerald-700">
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] text-emerald-700">
                 Transparansi Anggaran
               </p>
-              <p className="mt-1.5 text-lg font-black text-emerald-950 leading-none">
+              <p className="mt-1 text-lg font-black text-emerald-950 leading-none">
                 {hasData ? formatCurrency(totalNum) : '2026'}
               </p>
-              <p className="mt-1.5 text-[0.6rem] font-bold text-emerald-950/50">
-                {hasData ? 'Total APBDes' : 'Arahkan kursor untuk info'}
+              <p className="mt-1.5 text-[0.58rem] font-bold text-emerald-950/45">
+                {hasData ? 'Total APBDes' : 'Sorot diagram untuk info'}
               </p>
-            </>
+            </div>
           )}
         </div>
       </div>
 
-      {/* Legend list below */}
-      <div className="mt-6 grid w-full gap-2 text-xs">
+      {/* Clean horizontal row legend */}
+      <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-[0.68rem]">
         {chartData.map((item, idx) => (
           <div
             key={item.id}
             onMouseEnter={() => setHoveredIdx(idx)}
             onMouseLeave={() => setHoveredIdx(null)}
-            className={`flex items-center justify-between rounded-xl px-3 py-2 border transition-all duration-200 cursor-pointer ${
-              hoveredIdx === idx
-                ? 'border-emerald-700/20 bg-emerald-50/50 scale-[1.01]'
-                : 'border-transparent hover:bg-neutral-50'
-            }`}
+            className="flex items-center gap-1.5 cursor-pointer select-none transition-opacity duration-200"
+            style={{
+              opacity: hoveredIdx === null ? 1 : hoveredIdx === idx ? 1 : 0.5,
+            }}
           >
-            <div className="flex items-center gap-2.5 min-w-0">
-              <span className={`size-3 shrink-0 rounded-md ${fillColors[idx % fillColors.length]}`} />
-              <span className="font-bold text-emerald-950 truncate">{item.label}</span>
-            </div>
-            <span className="font-extrabold text-emerald-800 shrink-0 ml-2">
-              {item.value}
+            <span className={`size-2.5 rounded-full shrink-0 ${fillColors[idx % fillColors.length]}`} />
+            <span className="font-extrabold text-emerald-950/80 hover:text-emerald-950 transition-colors">
+              {item.label}
             </span>
           </div>
         ))}
