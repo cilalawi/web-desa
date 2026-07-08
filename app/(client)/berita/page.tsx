@@ -23,9 +23,9 @@ export default async function BeritaPage() {
   const mediaAsset = new Map(mediaAssets.map((asset) => [asset.id, asset]))
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-14">
+    <section className="mx-auto max-w-6xl px-4 py-10 md:py-14">
       <PageHero eyebrow="Berita" title="Berita Desa" description="Kabar terbaru, dokumentasi kegiatan, dan informasi pembangunan Desa Cilalawi." />
-      <div className="mt-8 grid gap-5 md:grid-cols-3">
+      <div className="mt-5 grid gap-3 md:mt-8 md:grid-cols-3 md:gap-5">
         {news.length ? (
           news.map((item) => {
             const itemImages = (item.coverAssetIds || []).length

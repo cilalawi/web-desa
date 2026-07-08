@@ -16,21 +16,21 @@ export default async function PetaPage() {
   ])
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-14">
+    <section className="mx-auto max-w-6xl px-4 py-10 md:py-14">
       <PageHero eyebrow="Peta" title="Peta Desa" description="Lokasi kantor desa dan wilayah layanan Pemerintah Desa Cilalawi." />
       {profile?.mapUrl ? (
-        <div className="mt-8 overflow-hidden rounded-[2rem] border border-emerald-900/10 bg-white p-2 shadow-lg shadow-emerald-900/10">
+        <div className="mt-5 overflow-hidden rounded-[1.35rem] border border-emerald-900/10 bg-white p-1.5 shadow-md shadow-emerald-900/5 md:mt-8 md:rounded-[2rem] md:p-2 md:shadow-lg md:shadow-emerald-900/10">
           <iframe
             src={profile.mapUrl}
             title="Peta Desa Cilalawi"
-            className="h-[30rem] w-full rounded-[1.5rem] border-0"
+            className="h-[20rem] w-full rounded-[1rem] border-0 md:h-[30rem] md:rounded-[1.5rem]"
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
       ) : (
-        <div className="mt-8">
+        <div className="mt-5 md:mt-8">
           <EmptyState message={settingValue(settings, 'empty.map')} />
         </div>
       )}

@@ -72,14 +72,14 @@ export function BudgetDonutChart({ items }: { items: BudgetItem[] }) {
   let accumulatedPercentage = 0
 
   return (
-    <div className="flex flex-col items-center justify-center p-2 text-emerald-950">
-      <div className="relative size-[260px]">
+    <div className="flex flex-col items-center justify-center p-1 text-emerald-950 md:p-2">
+      <div className="relative size-[220px] md:size-[260px]">
         {/* SVG Donut */}
         <svg
           width={size}
           height={size}
           viewBox={`0 0 ${size} ${size}`}
-          className="-rotate-90 transform select-none"
+          className="h-[220px] w-[220px] -rotate-90 transform select-none md:h-[260px] md:w-[260px]"
         >
           {/* Background circle */}
           <circle
@@ -122,7 +122,7 @@ export function BudgetDonutChart({ items }: { items: BudgetItem[] }) {
         </svg>
 
         {/* Center Text Container */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 pointer-events-none">
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-5 text-center pointer-events-none md:p-6">
           {hoveredIdx !== null ? (
             <div className="flex flex-col items-center justify-center animate-fade-in">
               <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] text-emerald-700 w-36 truncate">
@@ -154,7 +154,7 @@ export function BudgetDonutChart({ items }: { items: BudgetItem[] }) {
       </div>
 
       {/* Clean horizontal row legend */}
-      <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-[0.68rem]">
+      <div className="mt-4 flex flex-wrap justify-center gap-x-3 gap-y-1.5 text-[0.62rem] md:mt-6 md:gap-x-5 md:gap-y-2 md:text-[0.68rem]">
         {chartData.map((item, idx) => (
           <div
             key={item.id}

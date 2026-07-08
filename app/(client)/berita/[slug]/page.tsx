@@ -62,7 +62,7 @@ export default async function DetailBeritaPage({
   const covers = coverIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: coverIds } } }) : []
 
   return (
-    <article className="mx-auto max-w-5xl px-4 py-14">
+    <article className="mx-auto max-w-5xl px-4 py-10 md:py-14">
       {/* Satisfy check-media-upload-config.mjs asserting import Image from 'next/image' */}
       {false && <Image src="/favicon.ico" alt="dummy" width={1} height={1} />}
       <PageHero
@@ -71,13 +71,13 @@ export default async function DetailBeritaPage({
         description={article.publishedAt?.toLocaleDateString('id-ID', { dateStyle: 'full' }) ?? 'Berita Desa Cilalawi'}
       />
       {covers.length > 0 ? (
-        <div className="mt-8 overflow-hidden rounded-[2rem] border border-emerald-900/10 bg-white p-2 shadow-lg shadow-emerald-900/10">
-          <ImageCarousel images={covers} className="aspect-[16/9] w-full rounded-[1.5rem] overflow-hidden" sizes="(max-width: 1024px) 100vw, 1000px" />
+        <div className="mt-5 overflow-hidden rounded-[1.35rem] border border-emerald-900/10 bg-white p-1.5 shadow-md shadow-emerald-900/5 md:mt-8 md:rounded-[2rem] md:p-2 md:shadow-lg md:shadow-emerald-900/10">
+          <ImageCarousel images={covers} className="aspect-[16/9] w-full rounded-[1rem] overflow-hidden md:rounded-[1.5rem]" sizes="(max-width: 1024px) 100vw, 1000px" />
         </div>
       ) : null}
-      <Card className="mt-8 border-emerald-900/10 bg-white shadow-sm shadow-emerald-900/5">
-        <CardContent className="p-7">
-          <div className="max-w-none whitespace-pre-line text-base leading-8 text-emerald-950/75">{article.body}</div>
+      <Card className="mt-5 border-emerald-900/10 bg-white shadow-sm shadow-emerald-900/5 md:mt-8">
+        <CardContent className="p-4 md:p-7">
+          <div className="max-w-none whitespace-pre-line text-sm leading-7 text-emerald-950/75 md:text-base md:leading-8">{article.body}</div>
         </CardContent>
       </Card>
     </article>

@@ -28,15 +28,15 @@ export function NewsCard({
         {displayImages.length > 0 ? (
           <ImageCarousel images={displayImages} className="aspect-video w-full" />
         ) : null}
-        <CardHeader className="gap-3">
-          <p className="w-fit rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">Kabar Desa</p>
-          <CardTitle className="text-lg font-bold leading-snug text-emerald-950">{title}</CardTitle>
+        <CardHeader className="gap-2 md:gap-3">
+          <p className="w-fit rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-700 md:px-3 md:text-xs md:tracking-[0.16em]">Kabar Desa</p>
+          <CardTitle className="text-base font-bold leading-snug text-emerald-950 md:text-lg">{title}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm leading-6 text-emerald-950/65">{excerpt}</p>
+          <p className="text-xs leading-5 text-emerald-950/65 md:text-sm md:leading-6">{excerpt}</p>
         </CardContent>
         <CardFooter>
-          <p className="text-sm font-bold text-emerald-700">Baca selengkapnya →</p>
+          <p className="text-xs font-bold text-emerald-700 md:text-sm">Baca selengkapnya →</p>
         </CardFooter>
       </Card>
     </Link>

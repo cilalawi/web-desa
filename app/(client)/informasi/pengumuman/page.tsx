@@ -14,9 +14,9 @@ export default async function PengumumanPage() {
   ])
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-14">
+    <section className="mx-auto max-w-6xl px-4 py-10 md:py-14">
       <PageHero eyebrow="Informasi" title="Pengumuman Desa" description="Daftar pengumuman resmi Pemerintah Desa Cilalawi untuk warga." />
-      <div className="mt-8 grid gap-5 md:grid-cols-3">
+      <div className="mt-5 grid gap-3 md:mt-8 md:grid-cols-3 md:gap-5">
         {announcements.length ? (
           announcements.map((item) => (
             <AnnouncementCard

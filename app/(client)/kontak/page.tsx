@@ -23,14 +23,14 @@ export default async function KontakPage() {
   ]
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-14">
+    <section className="mx-auto max-w-6xl px-4 py-10 md:py-14">
       <PageHero eyebrow="Kontak" title="Kontak Desa" description="Informasi kanal komunikasi dan layanan Kantor Desa Cilalawi." />
-      <div className="mt-8 grid gap-5 md:grid-cols-2">
+      <div className="mt-5 grid gap-3 md:mt-8 md:grid-cols-2 md:gap-5">
         {contacts.map((item) => (
           <Card key={item.label} className="border-emerald-900/10 bg-white shadow-sm shadow-emerald-900/5">
-            <CardContent className="p-6">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">{item.label}</p>
-              <p className="mt-3 text-sm leading-6 text-emerald-950/70">{item.value}</p>
+            <CardContent className="p-4 md:p-6">
+              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-700 md:text-xs md:tracking-[0.18em]">{item.label}</p>
+              <p className="mt-2 text-xs leading-5 text-emerald-950/70 md:mt-3 md:text-sm md:leading-6">{item.value}</p>
             </CardContent>
           </Card>
         ))}

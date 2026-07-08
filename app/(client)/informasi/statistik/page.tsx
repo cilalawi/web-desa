@@ -14,9 +14,9 @@ export default async function StatistikPage() {
   ])
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-14">
+    <section className="mx-auto max-w-6xl px-4 py-10 md:py-14">
       <PageHero eyebrow="Informasi" title="Data Statistik" description="Ringkasan data penduduk, wilayah, dan potensi Desa Cilalawi." />
-      <div className="mt-8 grid gap-5 md:grid-cols-4">
+      <div className="mt-5 grid gap-3 md:mt-8 md:grid-cols-4 md:gap-5">
         {statistics.length ? (
           statistics.map((stat) => <StatCard key={stat.id} label={stat.label} value={stat.value} />)
         ) : (

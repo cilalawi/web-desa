@@ -24,9 +24,9 @@ export default async function ProdukPage() {
   const mediaAsset = new Map(mediaAssets.map((asset) => [asset.id, asset]))
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-14">
+    <section className="mx-auto max-w-6xl px-4 py-10 md:py-14">
       <PageHero eyebrow="Produk" title="Produk Desa" description="Etalase produk lokal, UMKM, dan potensi ekonomi masyarakat Desa Cilalawi." />
-      <div className="mt-8 grid gap-5 md:grid-cols-3">
+      <div className="mt-5 grid gap-3 md:mt-8 md:grid-cols-3 md:gap-5">
         {products.length ? (
           products.map((product) => {
             const itemImages = (product.imageAssetIds || []).length
@@ -36,13 +36,13 @@ export default async function ProdukPage() {
               : []
             return (
               <Card key={product.id} className="border-emerald-900/10 bg-white shadow-sm shadow-emerald-900/5 transition-all hover:-translate-y-1 hover:shadow-lg">
-                <CardContent className="p-5">
+                <CardContent className="p-4 md:p-5">
                   {itemImages.length > 0 ? (
-                    <ImageCarousel images={itemImages} className="mb-4 aspect-video rounded-[1.25rem] overflow-hidden" />
+                    <ImageCarousel images={itemImages} className="mb-3 aspect-video rounded-[1rem] overflow-hidden md:mb-4 md:rounded-[1.25rem]" />
                   ) : null}
-                  <p className="text-lg font-bold text-emerald-950">{product.name}</p>
-                  <p className="mt-2 text-sm leading-6 text-emerald-950/65">{product.description}</p>
-                  {product.contact ? <p className="mt-4 rounded-full bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-800">Kontak: {product.contact}</p> : null}
+                  <p className="text-base font-bold text-emerald-950 md:text-lg">{product.name}</p>
+                  <p className="mt-1.5 text-xs leading-5 text-emerald-950/65 md:mt-2 md:text-sm md:leading-6">{product.description}</p>
+                  {product.contact ? <p className="mt-3 rounded-full bg-emerald-50 px-3 py-1.5 text-[11px] font-bold text-emerald-800 md:mt-4 md:py-2 md:text-xs">Kontak: {product.contact}</p> : null}
                 </CardContent>
               </Card>
             )

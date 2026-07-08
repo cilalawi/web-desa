@@ -5,15 +5,15 @@ export function AnnouncementCard({ title, date, href, summary }: { title: string
   return (
     <Link href={href} className="block h-full">
       <Card className="h-full border-emerald-900/10 bg-white shadow-sm shadow-emerald-900/5 transition-all hover:-translate-y-1 hover:border-emerald-700/25 hover:shadow-lg hover:shadow-emerald-900/10">
-        <CardHeader className="gap-3">
-          <p className="w-fit rounded-full bg-lime-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-emerald-800">{date}</p>
-          <CardTitle className="text-lg font-bold leading-snug text-emerald-950">{title}</CardTitle>
+        <CardHeader className="gap-2 md:gap-3">
+          <p className="w-fit rounded-full bg-lime-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-800 md:px-3 md:text-xs md:tracking-[0.16em]">{date}</p>
+          <CardTitle className="text-base font-bold leading-snug text-emerald-950 md:text-lg">{title}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm leading-6 text-emerald-950/65">{summary ?? 'Informasi ini akan tampil setelah diperbarui oleh admin desa.'}</p>
+          <p className="text-xs leading-5 text-emerald-950/65 md:text-sm md:leading-6">{summary ?? 'Informasi ini akan tampil setelah diperbarui oleh admin desa.'}</p>
         </CardContent>
         <CardFooter>
-          <p className="text-sm font-bold text-emerald-700">Lihat pengumuman →</p>
+          <p className="text-xs font-bold text-emerald-700 md:text-sm">Lihat pengumuman →</p>
         </CardFooter>
       </Card>
     </Link>

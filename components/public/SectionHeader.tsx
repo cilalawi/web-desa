@@ -13,11 +13,11 @@ export function SectionHeader({
 }) {
   return (
     <div className={cn('max-w-3xl', align === 'center' && 'mx-auto text-center')}>
-      <p className="inline-flex rounded-full border border-emerald-900/10 bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.22em] text-emerald-700 shadow-sm">
+      <p className="inline-flex rounded-full border border-emerald-900/10 bg-emerald-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-700 shadow-sm md:px-3 md:text-xs md:tracking-[0.22em]">
         {eyebrow}
       </p>
-      <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-emerald-950 text-balance md:text-5xl">{title}</h2>
-      {description ? <p className={cn('mt-4 max-w-2xl text-base leading-7 text-emerald-900/70', align === 'center' && 'mx-auto')}>{description}</p> : null}
+      <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-emerald-950 text-balance md:mt-4 md:text-5xl">{title}</h2>
+      {description ? <p className={cn('mt-3 max-w-2xl text-sm leading-6 text-emerald-900/70 md:mt-4 md:text-base md:leading-7', align === 'center' && 'mx-auto')}>{description}</p> : null}
     </div>
   )
 }
