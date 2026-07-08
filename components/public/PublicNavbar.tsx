@@ -1,10 +1,60 @@
+'use client'
+
+import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { publicRoutes } from '@/lib/routes'
 
 const featuredRoutes = publicRoutes.slice(0, 7)
 
+const mobileRouteGroups = [
+  { label: 'Beranda', href: '/' },
+  {
+    label: 'Profil Desa',
+    href: '/profil',
+    children: [
+      { label: 'Aparatur', href: '/profil/aparatur' },
+      { label: 'Sejarah', href: '/profil/sejarah' },
+      { label: 'Visi & Misi', href: '/profil/visi-misi' },
+    ],
+  },
+  {
+    label: 'Informasi',
+    href: '/informasi/pengumuman',
+    children: [
+      { label: 'Pengumuman', href: '/informasi/pengumuman' },
+      { label: 'Agenda', href: '/informasi/agenda' },
+      { label: 'Statistik', href: '/informasi/statistik' },
+    ],
+  },
+  {
+    label: 'Layanan',
+    href: '/layanan',
+    children: [
+      { label: 'Daftar Layanan', href: '/layanan' },
+      { label: 'Pengaduan', href: '/layanan/pengaduan' },
+    ],
+  },
+  { label: 'Galeri', href: '/galeri' },
+  { label: 'Produk', href: '/produk' },
+  { label: 'Peta', href: '/peta' },
+  { label: 'Kontak', href: '/kontak' },
+] as const
+
 export function PublicNavbar() {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const closeDrawer = () => setIsOpen(false)
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : ''
+
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
   return (
     <header className="sticky top-0 z-50 border-b border-emerald-900/10 bg-white/95 shadow-sm backdrop-blur-xl">
       <div className="border-b border-emerald-900/10 bg-emerald-800 text-white">
@@ -40,28 +90,124 @@ export function PublicNavbar() {
           ))}
         </div>
 
-        <div className="flex shrink-0 items-center gap-2 text-sm">
-          <Button asChild variant="ghost" className="hidden h-10 rounded-full px-3 text-emerald-900 hover:bg-emerald-50 sm:inline-flex">
+        <div className="hidden shrink-0 items-center gap-2 text-sm lg:flex">
+          <Button asChild variant="ghost" className="h-10 rounded-full px-3 text-emerald-900 hover:bg-emerald-50">
             <Link href="/admin" prefetch={false}>Admin</Link>
           </Button>
           <Button asChild className="h-11 rounded-full bg-emerald-700 px-5 text-sm font-semibold text-white shadow-lg shadow-emerald-900/15 hover:bg-emerald-800">
             <Link href="/layanan/pengaduan">Ajukan Pengaduan</Link>
           </Button>
         </div>
-      </nav>
-      <div className="relative border-t border-emerald-900/10 bg-white/90 lg:hidden">
-        {/* Horizontal scroll gradient fade masks */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white/90 to-transparent pointer-events-none z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white/90 to-transparent pointer-events-none z-10" />
 
-        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 text-sm font-medium text-emerald-900 scrollbar-none">
-          {publicRoutes.map((route) => (
-            <Link key={route.href} href={route.href} className="shrink-0 rounded-full bg-emerald-50 px-3.5 py-2 hover:bg-emerald-100 transition-colors">
-              {route.label}
-            </Link>
-          ))}
-        </div>
-      </div>
+        <button
+          type="button"
+          aria-label={isOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
+          aria-expanded={isOpen}
+          aria-controls="mobile-navigation-drawer"
+          onClick={() => setIsOpen((open) => !open)}
+          className="inline-flex size-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-900/10 bg-emerald-50 text-emerald-950 shadow-sm transition-colors hover:bg-emerald-100 lg:hidden"
+        >
+          <span className="relative h-4 w-5">
+            <span className={`absolute left-0 top-0 h-0.5 w-5 rounded-full bg-current transition-transform ${isOpen ? 'translate-y-[7px] rotate-45' : ''}`} />
+            <span className={`absolute left-0 top-[7px] h-0.5 w-5 rounded-full bg-current transition-opacity ${isOpen ? 'opacity-0' : 'opacity-100'}`} />
+            <span className={`absolute left-0 top-3.5 h-0.5 w-5 rounded-full bg-current transition-transform ${isOpen ? '-translate-y-[7px] -rotate-45' : ''}`} />
+          </span>
+        </button>
+      </nav>
+
+      <AnimatePresence>
+        {isOpen ? (
+          <motion.div
+            className="fixed inset-0 z-[60] lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+          >
+            <button
+              type="button"
+              aria-label="Tutup menu navigasi"
+              className="absolute inset-0 bg-emerald-950/40 backdrop-blur-sm"
+              onClick={closeDrawer}
+            />
+            <motion.aside
+              id="mobile-navigation-drawer"
+              aria-label="Menu navigasi utama"
+              className="absolute right-0 top-0 flex h-full w-80 max-w-[85vw] flex-col overflow-hidden bg-white shadow-2xl shadow-emerald-950/20"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', stiffness: 360, damping: 34 }}
+            >
+              <div className="border-b border-emerald-900/10 bg-gradient-to-br from-emerald-50 via-white to-lime-50 p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-center gap-3 text-emerald-950">
+                    <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-emerald-700 to-lime-600 text-sm font-black text-white shadow-lg shadow-emerald-900/15">
+                      DC
+                    </span>
+                    <div>
+                      <p className="font-extrabold tracking-tight">Desa Cilalawi</p>
+                      <p className="mt-1 text-xs font-medium text-emerald-800/70">Menu layanan warga</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    aria-label="Tutup menu"
+                    onClick={closeDrawer}
+                    className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-emerald-950 shadow-sm ring-1 ring-emerald-900/10 transition-colors hover:bg-emerald-50"
+                  >
+                    <span className="relative block size-4">
+                      <span className="absolute left-0 top-1/2 h-0.5 w-4 -translate-y-1/2 rotate-45 rounded-full bg-current" />
+                      <span className="absolute left-0 top-1/2 h-0.5 w-4 -translate-y-1/2 -rotate-45 rounded-full bg-current" />
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-4 py-5">
+                <div className="space-y-3">
+                  {mobileRouteGroups.map((route) => (
+                    <div key={route.href} className="rounded-[1.5rem] border border-emerald-900/10 bg-white p-2 shadow-sm shadow-emerald-900/5">
+                      <Link
+                        href={route.href}
+                        onClick={closeDrawer}
+                        className="flex items-center justify-between rounded-[1.1rem] px-3 py-2.5 text-sm font-extrabold text-emerald-950 transition-colors hover:bg-emerald-50"
+                      >
+                        {route.label}
+                        <span aria-hidden className="text-emerald-700">→</span>
+                      </Link>
+                      {'children' in route ? (
+                        <div className="mt-1 grid gap-1 border-t border-emerald-900/10 px-2 py-2">
+                          {route.children.map((child) => (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              onClick={closeDrawer}
+                              className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-emerald-950/70 transition-colors hover:bg-emerald-50 hover:text-emerald-900"
+                            >
+                              <span className="size-1.5 rounded-full bg-emerald-500" />
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="border-t border-emerald-900/10 bg-emerald-50/70 p-4">
+                <Button asChild className="h-12 w-full rounded-full bg-emerald-700 text-sm font-semibold text-white shadow-lg shadow-emerald-900/15 hover:bg-emerald-800">
+                  <Link href="/layanan/pengaduan" onClick={closeDrawer}>Ajukan Pengaduan</Link>
+                </Button>
+                <Button asChild variant="ghost" className="mt-2 h-11 w-full rounded-full text-emerald-900 hover:bg-white">
+                  <Link href="/admin" prefetch={false} onClick={closeDrawer}>Masuk Admin</Link>
+                </Button>
+              </div>
+            </motion.aside>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </header>
   )
 }
