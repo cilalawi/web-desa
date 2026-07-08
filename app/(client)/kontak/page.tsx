@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import { PageHero } from '@/components/public/PageHero'
 import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
 import { getSiteSettings, settingValue } from '@/lib/site-settings'
+
+export const metadata: Metadata = {
+  title: 'Hubungi Kami - Kantor Pemerintah Desa Cilalawi',
+  description: 'Hubungi Kantor Pemerintah Desa Cilalawi. Temukan alamat resmi, nomor telepon layanan, email, dan jam operasional pelayanan warga.',
+}
 
 export default async function KontakPage() {
   const [profile, settings] = await Promise.all([

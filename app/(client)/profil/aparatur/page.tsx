@@ -1,8 +1,14 @@
+import type { Metadata } from 'next'
 import { EmptyState } from '@/components/public/EmptyState'
 import { ImageCarousel } from '@/components/public/ImageCarousel'
 import { PageHero } from '@/components/public/PageHero'
 import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
+
+export const metadata: Metadata = {
+  title: 'Aparatur Desa Cilalawi - Portal Resmi',
+  description: 'Daftar perangkat desa dan aparatur Pemerintah Desa Cilalawi yang siap melayani kebutuhan administrasi dan pelayanan publik warga.',
+}
 
 function initials(name: string) {
   return name

@@ -1,9 +1,15 @@
+import type { Metadata } from 'next'
 import { EmptyState } from '@/components/public/EmptyState'
 import { ImageCarousel } from '@/components/public/ImageCarousel'
 import { PageHero } from '@/components/public/PageHero'
 import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
 import { getSiteSettings, settingValue } from '@/lib/site-settings'
+
+export const metadata: Metadata = {
+  title: 'Galeri & Dokumentasi Kegiatan Desa Cilalawi - Portal Resmi',
+  description: 'Dokumentasi visual, foto-foto kegiatan pembangunan, pelayanan warga, dan suasana kemasyarakatan Desa Cilalawi.',
+}
 
 export default async function GaleriPage() {
   const [items, settings] = await Promise.all([

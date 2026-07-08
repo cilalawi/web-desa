@@ -1,8 +1,14 @@
+import type { Metadata } from 'next'
 import { EmptyState } from '@/components/public/EmptyState'
 import { NewsCard } from '@/components/public/NewsCard'
 import { PageHero } from '@/components/public/PageHero'
 import { prisma } from '@/lib/prisma'
 import { getSiteSettings, settingValue } from '@/lib/site-settings'
+
+export const metadata: Metadata = {
+  title: 'Kabar & Berita Desa Cilalawi - Portal Resmi',
+  description: 'Ikuti perkembangan berita terbaru, pengumuman resmi, agenda kegiatan, dan pembangunan di Desa Cilalawi.',
+}
 
 export default async function BeritaPage() {
   const [news, settings] = await Promise.all([

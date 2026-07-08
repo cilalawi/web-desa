@@ -1,8 +1,14 @@
+import type { Metadata } from 'next'
 import { EmptyState } from '@/components/public/EmptyState'
 import { PageHero } from '@/components/public/PageHero'
 import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
 import { getSiteSettings, settingValue } from '@/lib/site-settings'
+
+export const metadata: Metadata = {
+  title: 'Sejarah Desa Cilalawi - Portal Resmi',
+  description: 'Mengenal asal-usul, sejarah, perkembangan wilayah, dan warisan budaya Desa Cilalawi.',
+}
 
 export default async function SejarahPage() {
   const [setting, settings] = await Promise.all([

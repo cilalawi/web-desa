@@ -1,9 +1,15 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { EmptyState } from '@/components/public/EmptyState'
 import { PageHero } from '@/components/public/PageHero'
 import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
 import { getSiteSettings, settingValue } from '@/lib/site-settings'
+
+export const metadata: Metadata = {
+  title: 'Layanan Publik Desa Cilalawi - Portal Resmi',
+  description: 'Temukan informasi persyaratan dan pengurusan administrasi kependudukan serta pengaduan warga di Desa Cilalawi.',
+}
 
 export default async function LayananPage() {
   const [services, settings] = await Promise.all([

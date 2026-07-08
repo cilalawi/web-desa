@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { PageHero } from '@/components/public/PageHero'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -5,6 +6,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { createComplaint } from './actions'
+
+export const metadata: Metadata = {
+  title: 'Pengaduan Kependudukan Desa Cilalawi - Portal Resmi',
+  description: 'Sampaikan laporan, aduan, saran, dan aspirasi kependudukan Anda secara langsung kepada Pemerintah Desa Cilalawi.',
+}
 
 const fields = [
   { id: 'nik', label: 'NIK', type: 'text', placeholder: 'Masukkan NIK', required: true },

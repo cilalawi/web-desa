@@ -1,9 +1,45 @@
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import { PageHero } from '@/components/public/PageHero'
 import { Card, CardContent } from '@/components/ui/card'
 import { ImageCarousel } from '@/components/public/ImageCarousel'
 import { prisma } from '@/lib/prisma'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const article = await prisma.news.findUnique({ where: { slug } })
+
+  if (!article || article.status !== 'PUBLISHED') return {}
+
+  const coverIds = article.coverAssetIds?.length
+    ? article.coverAssetIds
+    : article.coverAssetId
+    ? [article.coverAssetId]
+    : []
+  const cover = coverIds.length ? await prisma.mediaAsset.findFirst({ where: { id: { in: coverIds } } }) : null
+
+  return {
+    title: `${article.title} - Desa Cilalawi`,
+    description: article.excerpt,
+    openGraph: {
+      title: article.title,
+      description: article.excerpt,
+      type: 'article',
+      images: cover ? [{ url: cover.url, alt: article.title }] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.excerpt,
+      images: cover ? [cover.url] : undefined,
+    },
+  }
+}
 
 export default async function DetailBeritaPage({
   params,

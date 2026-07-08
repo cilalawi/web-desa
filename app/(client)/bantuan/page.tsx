@@ -1,5 +1,11 @@
+import type { Metadata } from 'next'
 import { PageHero } from '@/components/public/PageHero'
 import { Card, CardContent } from '@/components/ui/card'
+
+export const metadata: Metadata = {
+  title: 'Panduan Bantuan Penggunaan Portal - Desa Cilalawi',
+  description: 'Panduan dan bantuan penggunaan portal resmi Desa Cilalawi untuk mencari informasi, layanan warga, dan pengaduan online.',
+}
 
 const tips = [
   { title: 'Cari Informasi', text: 'Gunakan menu navigasi untuk menemukan pengumuman, berita, agenda, dan data desa.' },

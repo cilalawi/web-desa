@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import { PageHero } from '@/components/public/PageHero'
 import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
 import { getSiteSettings, settingValue } from '@/lib/site-settings'
+
+export const metadata: Metadata = {
+  title: 'Visi & Misi Desa Cilalawi - Portal Resmi',
+  description: 'Visi dan Misi arah pembangunan serta pelayanan Pemerintah Desa Cilalawi untuk kesejahteraan masyarakat.',
+}
 
 export default async function VisiMisiPage() {
   const [visi, misi, settings] = await Promise.all([

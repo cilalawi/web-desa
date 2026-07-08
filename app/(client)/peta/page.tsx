@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import { EmptyState } from '@/components/public/EmptyState'
 import { PageHero } from '@/components/public/PageHero'
 import { prisma } from '@/lib/prisma'
 import { getSiteSettings, settingValue } from '@/lib/site-settings'
+
+export const metadata: Metadata = {
+  title: 'Peta Wilayah & Lokasi Desa Cilalawi - Portal Resmi',
+  description: 'Peta wilayah administratif Desa Cilalawi, Sukatani, Purwakarta. Temukan lokasi Kantor Desa dan titik-titik penting pelayanan warga.',
+}
 
 export default async function PetaPage() {
   const [profile, settings] = await Promise.all([

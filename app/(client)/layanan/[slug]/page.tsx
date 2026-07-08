@@ -1,7 +1,28 @@
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import { PageHero } from '@/components/public/PageHero'
 import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const service = await prisma.service.findUnique({ where: { slug } })
+
+  if (!service || service.status !== 'PUBLISHED') return {}
+
+  return {
+    title: `${service.title} - Layanan Desa Cilalawi`,
+    description: service.description,
+    openGraph: {
+      title: service.title,
+      description: service.description,
+    },
+  }
+}
 
 export default async function DetailLayananPage({
   params,

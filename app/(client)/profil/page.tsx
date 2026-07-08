@@ -1,10 +1,16 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { EmptyState } from '@/components/public/EmptyState'
 import { PageHero } from '@/components/public/PageHero'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
 import { getSiteSettings, settingValue } from '@/lib/site-settings'
+
+export const metadata: Metadata = {
+  title: 'Profil Desa Cilalawi - Portal Resmi',
+  description: 'Kenali lebih dekat wilayah, profil, dan data administrasi Desa Cilalawi, Kecamatan Sukatani, Kabupaten Purwakarta.',
+}
 
 export default async function ProfilPage() {
   const [profile, settings] = await Promise.all([
