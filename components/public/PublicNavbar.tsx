@@ -67,7 +67,8 @@ export function PublicNavbar() {
   }, [])
 
   return (
-    <header className="sticky top-0 z-50 border-b border-emerald-900/10 bg-white/95 shadow-sm backdrop-blur-xl">
+    <>
+      <header className="sticky top-0 z-50 border-b border-emerald-900/10 bg-white/95 shadow-sm backdrop-blur-xl">
       <div className="hidden border-b border-emerald-900/10 bg-emerald-800 text-white md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2 text-xs font-medium">
           <p className="uppercase tracking-[0.18em]">Website Resmi Pemerintah Desa Cilalawi</p>
@@ -126,10 +127,12 @@ export function PublicNavbar() {
         </button>
       </nav>
 
+      </header>
+
       <AnimatePresence>
         {isOpen ? (
           <motion.div
-            className="fixed inset-0 z-[60] lg:hidden"
+            className="fixed inset-0 z-[100] lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -208,6 +211,6 @@ export function PublicNavbar() {
           </motion.div>
         ) : null}
       </AnimatePresence>
-    </header>
+    </>
   )
 }
