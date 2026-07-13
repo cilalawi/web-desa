@@ -82,7 +82,7 @@ export function PublicNavbar() {
       <nav className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-3 px-4 py-2.5 md:min-h-20 md:gap-4 md:py-3">
         <Link href="/" className="flex min-w-0 items-center gap-2.5 text-emerald-950 md:gap-3">
           <img
-            src="/image.png"
+            src="/logo-desa.png"
             alt="Desa Cilalawi"
             className="size-10 shrink-0 rounded-2xl object-cover shadow-md shadow-emerald-900/10 ring-1 ring-white/70 md:size-12 md:shadow-lg md:shadow-emerald-900/15"
           />
