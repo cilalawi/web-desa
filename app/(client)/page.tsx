@@ -52,17 +52,17 @@ export default async function HomePage() {
         <div className="relative mx-auto grid max-w-7xl gap-7 px-4 py-8 md:py-12 lg:min-h-[calc(100dvh-8rem)] lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-10 lg:py-20">
           <div>
             <MotionItem>
-              <p className="inline-flex rounded-full border border-emerald-800/15 bg-white/85 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-800 shadow-sm md:px-4 md:py-2 md:text-xs md:tracking-[0.22em]">
+              <p className="inline-flex rounded-full border border-emerald-800/15 bg-white/85 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-800 shadow-sm md:px-4 md:py-1.5 md:text-xs md:tracking-[0.22em]">
                 {profile.tagline || 'Portal Resmi Desa'}
               </p>
             </MotionItem>
             <MotionItem delay={0.08}>
-              <h1 className="mt-4 max-w-4xl text-4xl font-black leading-[0.98] tracking-tight text-emerald-950 text-balance md:mt-6 md:text-7xl">
+              <h1 className="mt-3 max-w-4xl text-[1.75rem] font-black leading-[1.05] tracking-tight text-emerald-950 text-balance sm:text-4xl md:mt-5 md:text-7xl md:leading-[0.98]">
                 {copy('home.hero.title')}
               </h1>
             </MotionItem>
             <MotionItem delay={0.16}>
-              <p className="mt-4 max-w-2xl text-sm leading-6 text-emerald-950/70 md:mt-6 md:text-lg md:leading-8">{profile.description}</p>
+              <p className="mt-3 max-w-xl text-[13px] leading-[1.7] text-emerald-950/65 sm:max-w-2xl md:mt-5 md:text-lg md:leading-8">{profile.description}</p>
             </MotionItem>
             <MotionItem delay={0.24}>
               <div className="mt-5 flex flex-wrap gap-2.5 md:mt-8 md:gap-3">
