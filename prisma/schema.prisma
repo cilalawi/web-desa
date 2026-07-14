@@ -75,6 +75,7 @@ model Statistic {
   id        String        @id @default(cuid())
   label     String
   value     String
+  category  String        @default("Umum")
   note      String?
   order     Int           @default(0)
   status    ContentStatus @default(PUBLISHED)

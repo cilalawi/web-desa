@@ -174,10 +174,60 @@ async function main() {
   }
 
   const statistics = [
-    { label: 'Profil wilayah', value: 'Siap diisi', order: 1 },
-    { label: 'Data penduduk', value: 'Verifikasi', order: 2 },
-    { label: 'Layanan warga', value: 'Aktif', order: 3 },
-    { label: 'Transparansi', value: 'Terjadwal', order: 4 },
+    // Umum
+    { label: 'Luas Wilayah', value: '284,14 Ha', category: 'Umum', order: 1 },
+    { label: 'Total Penduduk', value: '5.450 Jiwa', category: 'Umum', order: 2 },
+    { label: 'Jumlah Kepala Keluarga (KK)', value: '1.637 KK', category: 'Umum', order: 3 },
+    { label: 'Penduduk Laki-laki', value: '2.766 Jiwa', category: 'Umum', order: 4 },
+    { label: 'Penduduk Perempuan', value: '2.684 Jiwa', category: 'Umum', order: 5 },
+
+    // Batas Wilayah
+    { label: 'Batas Utara', value: 'Desa Sukajaya', category: 'Batas Wilayah', order: 6 },
+    { label: 'Batas Selatan', value: 'Desa Malangnengah', category: 'Batas Wilayah', order: 7 },
+    { label: 'Batas Barat', value: 'Desa Cibodas', category: 'Batas Wilayah', order: 8 },
+    { label: 'Batas Timur', value: 'Desa Sukatani', category: 'Batas Wilayah', order: 9 },
+
+    // Agama
+    { label: 'Agama Islam', value: '5.437 Jiwa', category: 'Agama', order: 10 },
+    { label: 'Agama Protestan', value: '5 Jiwa', category: 'Agama', order: 11 },
+    { label: 'Agama Katolik', value: '2 Jiwa', category: 'Agama', order: 12 },
+    { label: 'Agama Hindu', value: '0 Jiwa', category: 'Agama', order: 13 },
+    { label: 'Agama Buddha', value: '6 Jiwa', category: 'Agama', order: 14 },
+    { label: 'Agama Khonghucu', value: '0 Jiwa', category: 'Agama', order: 15 },
+
+    // Kelompok Usia
+    { label: 'Usia 0 - 4 tahun', value: '440 Jiwa', category: 'Kelompok Usia', order: 16 },
+    { label: 'Usia 5 - 9 tahun', value: '468 Jiwa', category: 'Kelompok Usia', order: 17 },
+    { label: 'Usia 10 - 14 tahun', value: '512 Jiwa', category: 'Kelompok Usia', order: 18 },
+    { label: 'Usia 15 - 19 tahun', value: '494 Jiwa', category: 'Kelompok Usia', order: 19 },
+    { label: 'Usia 20 - 24 tahun', value: '486 Jiwa', category: 'Kelompok Usia', order: 20 },
+    { label: 'Usia 25 - 29 tahun', value: '432 Jiwa', category: 'Kelompok Usia', order: 21 },
+    { label: 'Usia 30 - 34 tahun', value: '395 Jiwa', category: 'Kelompok Usia', order: 22 },
+    { label: 'Usia 35 - 39 tahun', value: '367 Jiwa', category: 'Kelompok Usia', order: 23 },
+    { label: 'Usia 40 - 44 tahun', value: '374 Jiwa', category: 'Kelompok Usia', order: 24 },
+    { label: 'Usia 45 - 49 tahun', value: '337 Jiwa', category: 'Kelompok Usia', order: 25 },
+    { label: 'Usia 50 - 54 tahun', value: '308 Jiwa', category: 'Kelompok Usia', order: 26 },
+    { label: 'Usia 55 - 59 tahun', value: '260 Jiwa', category: 'Kelompok Usia', order: 27 },
+    { label: 'Usia 60 - 64 tahun', value: '201 Jiwa', category: 'Kelompok Usia', order: 28 },
+    { label: 'Usia 65 - 69 tahun', value: '161 Jiwa', category: 'Kelompok Usia', order: 29 },
+    { label: 'Usia 70 - 74 tahun', value: '110 Jiwa', category: 'Kelompok Usia', order: 30 },
+    { label: 'Usia 75 tahun ke atas', value: '105 Jiwa', category: 'Kelompok Usia', order: 31 },
+
+    // Sarana Pendidikan
+    { label: 'Pendidikan PAUD', value: '4 Unit', category: 'Pendidikan', order: 32 },
+    { label: 'Pendidikan TK', value: '2 Unit', category: 'Pendidikan', order: 33 },
+    { label: 'Pendidikan SD', value: '3 Unit', category: 'Pendidikan', order: 34 },
+    { label: 'Pendidikan SMP', value: '1 Unit', category: 'Pendidikan', order: 35 },
+    { label: 'Pendidikan MDT', value: '5 Unit', category: 'Pendidikan', order: 36 },
+    { label: 'Pendidikan Ponpes', value: '4 Unit', category: 'Pendidikan', order: 37 },
+
+    // Sarana Kesehatan
+    { label: 'Kesehatan Pustu', value: '1 Unit', category: 'Kesehatan', order: 38 },
+    { label: 'Kesehatan Posyandu', value: '7 Unit', category: 'Kesehatan', order: 39 },
+
+    // Sarana Keagamaan
+    { label: 'Keagamaan Mesjid', value: '11 Unit', category: 'Keagamaan', order: 40 },
+    { label: 'Keagamaan Mushola', value: '17 Unit', category: 'Keagamaan', order: 41 },
   ]
 
   for (const stat of statistics) {

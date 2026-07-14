@@ -196,10 +196,11 @@ export async function upsertStatistic(fd: FormData) {
   const id = optStr(fd, 'id')
   const label = str(fd, 'label', 'Label')
   const value = str(fd, 'value', 'Nilai')
+  const category = str(fd, 'category', 'Kategori')
   const note = optStr(fd, 'note')
   const order = parseInt(fd.get('order') as string) || 0
   const s = status(fd)
-  const data = { label, value, note, order, status: s }
+  const data = { label, value, category, note, order, status: s }
   if (id) await prisma.statistic.update({ where: { id }, data })
   else await prisma.statistic.create({ data })
   revalidatePath('/admin/informasi/statistik')
