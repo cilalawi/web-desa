@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { publicRoutes } from '@/lib/routes'
 import { cn } from '@/lib/utils'
 
-const featuredRoutes = publicRoutes.slice(0, 7)
+const featuredRoutes = publicRoutes.slice(0, 8)
 
 const mobileRouteGroups = [
   {

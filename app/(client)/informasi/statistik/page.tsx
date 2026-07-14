@@ -141,28 +141,34 @@ export default async function StatistikPage() {
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-black text-emerald-950 uppercase tracking-[0.12em]">Batas Wilayah</CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 flex items-center justify-center py-6">
-              <div className="relative w-full max-w-[240px] aspect-square flex items-center justify-center border border-dashed border-emerald-900/20 rounded-full p-4 bg-emerald-50/20">
-                <div className="absolute top-1 text-center">
-                  <span className="text-[9px] font-black uppercase text-emerald-800 tracking-wider block">Utara</span>
-                  <p className="text-xs font-bold text-emerald-950 truncate max-w-[100px]">{batasUtara?.value || '-'}</p>
+            <CardContent className="space-y-3.5 pt-4">
+              <div className="flex items-center justify-between border-b border-emerald-900/5 pb-2">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex size-6 items-center justify-center rounded bg-emerald-100 text-[10px] font-black text-emerald-800">U</span>
+                  <span className="text-xs font-extrabold text-emerald-950/70">Utara</span>
                 </div>
-                <div className="absolute bottom-1 text-center flex flex-col items-center">
-                  <p className="text-xs font-bold text-emerald-950 truncate max-w-[100px]">{batasSelatan?.value || '-'}</p>
-                  <span className="text-[9px] font-black uppercase text-emerald-800 tracking-wider block leading-none">Selatan</span>
+                <span className="text-xs font-black text-emerald-950">{batasUtara?.value || '-'}</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-emerald-900/5 pb-2">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex size-6 items-center justify-center rounded bg-emerald-100 text-[10px] font-black text-emerald-800">S</span>
+                  <span className="text-xs font-extrabold text-emerald-950/70">Selatan</span>
                 </div>
-                <div className="absolute left-1 text-center">
-                  <span className="text-[9px] font-black uppercase text-emerald-800 tracking-wider block">Barat</span>
-                  <p className="text-xs font-bold text-emerald-950 truncate max-w-[80px]">{batasBarat?.value || '-'}</p>
+                <span className="text-xs font-black text-emerald-950">{batasSelatan?.value || '-'}</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-emerald-900/5 pb-2">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex size-6 items-center justify-center rounded bg-emerald-100 text-[10px] font-black text-emerald-800">B</span>
+                  <span className="text-xs font-extrabold text-emerald-950/70">Barat</span>
                 </div>
-                <div className="absolute right-1 text-center">
-                  <span className="text-[9px] font-black uppercase text-emerald-800 tracking-wider block">Timur</span>
-                  <p className="text-xs font-bold text-emerald-950 truncate max-w-[80px]">{batasTimur?.value || '-'}</p>
+                <span className="text-xs font-black text-emerald-950">{batasBarat?.value || '-'}</span>
+              </div>
+              <div className="flex items-center justify-between pb-1">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex size-6 items-center justify-center rounded bg-emerald-100 text-[10px] font-black text-emerald-800">T</span>
+                  <span className="text-xs font-extrabold text-emerald-950/70">Timur</span>
                 </div>
-                <div className="flex flex-col items-center justify-center size-16 bg-white rounded-full border border-emerald-900/10 shadow-sm select-none">
-                  <span className="text-[10px] font-black text-emerald-800 leading-none">DESA</span>
-                  <span className="text-[9px] font-extrabold text-emerald-950/50 mt-0.5">CILALAWI</span>
-                </div>
+                <span className="text-xs font-black text-emerald-950">{batasTimur?.value || '-'}</span>
               </div>
             </CardContent>
           </Card>

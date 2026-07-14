@@ -35,6 +35,20 @@ export default async function KontakPage() {
           </Card>
         ))}
       </div>
+      {profile?.mapUrl ? (
+        <Card className="mt-5 border-emerald-900/10 bg-white p-1.5 shadow-md shadow-emerald-900/5 md:mt-8 md:p-2 md:shadow-lg md:shadow-emerald-900/10">
+          <CardContent className="p-0">
+            <iframe
+              src={profile.mapUrl}
+              title="Peta Lokasi Kantor Desa Cilalawi"
+              className="h-[20rem] w-full rounded-[1rem] border-0 md:h-[26rem] md:rounded-[1.5rem]"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </CardContent>
+        </Card>
+      ) : null}
     </section>
   )
 }
