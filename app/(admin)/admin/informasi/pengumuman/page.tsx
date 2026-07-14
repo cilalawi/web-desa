@@ -33,7 +33,7 @@ export default async function AdminPengumumanPage({
 
   return (
     <section>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex  flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <AdminPageHeader title="Kelola Pengumuman" description="Buat dan terbitkan pengumuman resmi desa." />
         <AdminCrudDialog title="Tambah Pengumuman" description="Pengumuman akan tampil di halaman informasi publik." trigger="Tambah Pengumuman">
           <AnnouncementForm />
@@ -41,7 +41,7 @@ export default async function AdminPengumumanPage({
       </div>
       {notice.saved ? <SaveNotice type="saved" /> : null}
       {notice.deleted ? <SaveNotice type="deleted" /> : null}
-      <div className="grid gap-3">
+      <div className="grid gap-3 grid-cols-1 sm:grid-cols-3 md:gap-5">
         {items.map((item) => (
           <Card key={item.id}>
             <CardContent className="grid gap-4 md:grid-cols-[1fr_auto] md:items-start">
