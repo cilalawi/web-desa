@@ -124,7 +124,7 @@ export default async function HomePage() {
           </Button>
         </div>
         {statistics.length ? (
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-4 grid-cols-2">
             {statistics.map((stat) => (
               <StatCard key={stat.id} label={stat.label} value={stat.value} />
             ))}
@@ -233,7 +233,7 @@ export default async function HomePage() {
               <Link href="/profil/aparatur">Lihat semua aparatur</Link>
             </Button>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 md:gap-5 lg:grid-cols-4">
+          <div className="grid gap-3 sm:grid-cols-2 md:gap-5 lg:grid-cols-4 grid-cols-2">
             {officials.map((official) => {
               const itemImages = (official.photoAssetIds || []).length
                 ? official.photoAssetIds.map((id) => mediaAsset.get(id)).filter((img): img is NonNullable<typeof img> => Boolean(img))
