@@ -33,6 +33,17 @@ export default async function AdminPengumumanPage({
 
   return (
     <section>
+
+
+
+
+
+
+
+
+
+
+
       <div className="flex  flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <AdminPageHeader title="Kelola Pengumuman" description="Buat dan terbitkan pengumuman resmi desa." />
         <AdminCrudDialog title="Tambah Pengumuman" description="Pengumuman akan tampil di halaman informasi publik." trigger="Tambah Pengumuman">

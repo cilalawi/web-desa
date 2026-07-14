@@ -30,7 +30,7 @@ export default async function AdminAnggaranPage({
 }: {
   searchParams: Promise<{ saved?: string; deleted?: string }>
 }) {
-  const notice = await searchParams
+  const notice = (await searchParams) || {}
   const items = await prisma.budgetItem.findMany({ orderBy: [{ year: 'desc' }, { order: 'asc' }] })
 
   return (

@@ -33,7 +33,7 @@ export default async function AdminAgendaPage({
 }: {
   searchParams: Promise<{ saved?: string; deleted?: string }>
 }) {
-  const notice = await searchParams
+  const notice = (await searchParams) || {}
   const items = await prisma.agenda.findMany({ orderBy: { startsAt: 'desc' } })
 
   return (

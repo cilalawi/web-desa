@@ -44,7 +44,7 @@ export default async function AdminBeritaPage({
 }: {
   searchParams: Promise<{ saved?: string; deleted?: string }>
 }) {
-  const notice = await searchParams
+  const notice = (await searchParams) || {}
   const items = await prisma.news.findMany({ orderBy: { updatedAt: 'desc' } })
   const coverAssetIds = items.flatMap((item) => [...(item.coverAssetIds || []), item.coverAssetId].filter((id): id is string => Boolean(id)))
   const mediaAssets = coverAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: coverAssetIds } } }) : []

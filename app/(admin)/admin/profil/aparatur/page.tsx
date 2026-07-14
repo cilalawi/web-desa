@@ -46,7 +46,7 @@ export default async function AdminAparaturPage({
 }: {
   searchParams: Promise<{ saved?: string; deleted?: string }>
 }) {
-  const notice = await searchParams
+  const notice = (await searchParams) || {}
   const items = await prisma.villageOfficial.findMany({ orderBy: { order: 'asc' } })
   const photoAssetIds = items.flatMap((item) => [...(item.photoAssetIds || []), item.photoAssetId].filter((id): id is string => Boolean(id)))
   const mediaAssets = photoAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: photoAssetIds } } }) : []

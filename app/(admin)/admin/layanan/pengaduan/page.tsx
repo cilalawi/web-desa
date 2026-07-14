@@ -11,7 +11,7 @@ export default async function AdminPengaduanPage({
 }: {
   searchParams: Promise<{ saved?: string; deleted?: string }>
 }) {
-  const notice = await searchParams
+  const notice = (await searchParams) || {}
   const items = await prisma.complaint.findMany({ orderBy: { createdAt: 'desc' } })
 
   return (

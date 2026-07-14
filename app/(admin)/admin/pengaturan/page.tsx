@@ -12,7 +12,7 @@ export default async function AdminPengaturanPage({
 }: {
   searchParams: Promise<{ saved?: string; deleted?: string }>
 }) {
-  const notice = await searchParams
+  const notice = (await searchParams) || {}
   const rows = await prisma.siteSetting.findMany({ where: { key: { in: SITE_SETTING_KEYS } } })
   const byKey = new Map(rows.map((r) => [r.key, r]))
 

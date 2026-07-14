@@ -24,7 +24,7 @@ export default async function PengaduanPage({
 }: {
   searchParams: Promise<{ status?: string }>
 }) {
-  const params = await searchParams
+  const params = (await searchParams) || {}
   const isSent = params.status === 'terkirim'
 
   return (

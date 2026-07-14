@@ -11,7 +11,7 @@ export default async function AdminProfilPage({
 }: {
   searchParams: Promise<{ saved?: string; deleted?: string }>
 }) {
-  const notice = await searchParams
+  const notice = (await searchParams) || {}
   const profile = await prisma.villageProfile.findFirst({ where: { name: 'Desa Cilalawi' } })
 
   return (

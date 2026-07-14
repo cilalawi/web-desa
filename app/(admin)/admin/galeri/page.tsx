@@ -44,7 +44,7 @@ export default async function AdminGaleriPage({
 }: {
   searchParams: Promise<{ saved?: string; deleted?: string }>
 }) {
-  const notice = await searchParams
+  const notice = (await searchParams) || {}
   const items = await prisma.galleryItem.findMany({ orderBy: { order: 'asc' } })
   const mediaAssetIds = items.flatMap((item) => [...(item.mediaAssetIds || []), item.mediaAssetId].filter((id): id is string => Boolean(id)))
   const mediaAssets = mediaAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: mediaAssetIds } } }) : []

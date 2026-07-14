@@ -44,7 +44,7 @@ export default async function AdminProdukPage({
 }: {
   searchParams: Promise<{ saved?: string; deleted?: string }>
 }) {
-  const notice = await searchParams
+  const notice = (await searchParams) || {}
   const items = await prisma.product.findMany({ orderBy: { updatedAt: 'desc' } })
   const imageAssetIds = items.flatMap((item) => [...(item.imageAssetIds || []), item.imageAssetId].filter((id): id is string => Boolean(id)))
   const mediaAssets = imageAssetIds.length ? await prisma.mediaAsset.findMany({ where: { id: { in: imageAssetIds } } }) : []

@@ -29,7 +29,7 @@ export default async function AdminLayananPage({
 }: {
   searchParams: Promise<{ saved?: string; deleted?: string }>
 }) {
-  const notice = await searchParams
+  const notice = (await searchParams) || {}
   const items = await prisma.service.findMany({ orderBy: { order: 'asc' } })
 
   return (
